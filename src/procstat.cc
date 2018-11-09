@@ -31,14 +31,14 @@ const char* Kvmpro::procstat_files(struct procstat *procstat, struct kinfo_proc 
                         out << addr_to_string(&sock.sa_local);
                     else
                         out << addr_to_string(&sock.sa_peer);
+                    out << ", ";
+                    sun = NULL;
                 } else {
-                    out << addr_to_string(&sock.sa_local) << "-" << addr_to_string(&sock.sa_peer);
+                    out << addr_to_string(&sock.sa_local);
                 }
-                out << "#";
             }
         }
     }
-
     procstat_freefiles(procstat, head);
     head = NULL;
     fst = NULL;
