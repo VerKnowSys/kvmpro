@@ -1,0 +1,96 @@
+#!/bin/sh
+# blame: @dmilith
+# 2018-11-09-0400-1541732403
+
+
+_loader="/Software/Sofin/share/loader"
+if [ ! -f "${_loader}" ]; then
+    echo "This scripts requires Sofin-Installer to be available in system!"
+    exit 1
+else
+    . /Software/Sofin/share/loader
+    echo
+    note "Sofin library has been loaded…"
+fi
+
+if [ "FreeBSD" != "${SYSTEM_NAME}" ]; then
+    error "Platform unsupported: $(distn "${SYSTEM_NAME}")"
+fi
+
+# Only for FreeBSD-compatible operating systems! Will just crash on other systems (if their "compiler tripple" has different value)
+ONLY_FOR_ELF64="elf_x86_64_fbsd"
+
+# Link product to library name:
+PROJECT_LIBRARY_NAME="libkvmpro.so"
+
+# Install products to-directory:
+PROJECT_PREFIX="lib"
+PROJECT_BUILD_DIR="obj"
+
+# Use Sofin variables with compiler setup:
+PROJECT_CXX_FLAGS="-O2 -fPIC ${HARDEN_CFLAGS} ${HARDEN_CFLAGS_PRODUCTION} ${CMACROS} ${RETPOLINE_CFLAGS} ${HARDEN_CMACROS} ${HARDEN_OFLOW_CFLAGS} -Wno-unused-command-line-argument"
+PROJECT_LD_FLAGS="-m ${ONLY_FOR_ELF64} -shared -z retpolineplt ${HARDEN_LDFLAGS_PRODUCTION}"
+
+# Link project with all required system libraries:
+PROJECT_LINKS_WITH="-lc -lc++ -lgcc_s -lkvm -lprocstat"
+
+
+# Wipe old Project objects:
+rm -f \
+    ${PROJECT_PREFIX}/*.a \
+    ${PROJECT_PREFIX}/*.so \
+    ${PROJECT_BUILD_DIR}/*.o
+mkdir \
+    -p \
+    "${PROJECT_PREFIX}" \
+    "${PROJECT_BUILD_DIR}"
+
+permnote "Library: $(distn "${PROJECT_LIBRARY_NAME%.so}")"
+permnote "Compiler flags: $(distn "${PROJECT_CXX_FLAGS}")"
+permnote "Linker flags: $(distn "${PROJECT_LD_FLAGS}")"
+echo
+
+_state=""
+for _pro_file in \
+    "utils" \
+    "kvm" \
+    "procstat" \
+    ; do
+        _state="${_state} ${_pro_file}"
+        note "Building objects:$(distn "${_state}")…"
+        c++ \
+            ${PROJECT_CXX_FLAGS} \
+            -o "${PROJECT_BUILD_DIR}/${_pro_file}.o" \
+            -c \
+            "src/${_pro_file}.cc"
+done
+echo
+
+# Link to shared library:
+note "Link shared-object with system libraries: $(distn "${PROJECT_LINKS_WITH}")."
+ld \
+    ${PROJECT_LD_FLAGS} \
+    ${PROJECT_LINKS_WITH} \
+    -o "${PROJECT_PREFIX}/${PROJECT_LIBRARY_NAME}" \
+    ${PROJECT_BUILD_DIR}/*.o
+
+note "Link static-object with system libraries: $(distn "${PROJECT_LINKS_WITH}")."
+ar \
+    -cvq "${PROJECT_PREFIX}/${PROJECT_LIBRARY_NAME%.so}.a" \
+    ${PROJECT_BUILD_DIR}/*.o
+
+echo
+note "Strip all symbols…"
+strip -s "${PROJECT_PREFIX}/${PROJECT_LIBRARY_NAME}"
+
+if [ -f "${PROJECT_PREFIX}/${PROJECT_LIBRARY_NAME}" ]; then
+    permnote "Shared build successful: $(distn "${PROJECT_PREFIX}/${PROJECT_LIBRARY_NAME}")"
+    if [ -f "${PROJECT_PREFIX}/${PROJECT_LIBRARY_NAME%.so}.a" ]; then
+        permnote "Static build successful: $(distn "${PROJECT_PREFIX}/${PROJECT_LIBRARY_NAME%.so}.a")"
+    else
+        error "Failed to build static library!"
+    fi
+else
+    error "Failed to build shared library!"
+fi
+

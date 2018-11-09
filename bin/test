@@ -1,0 +1,29 @@
+#!/bin/sh
+# blame: @dmilith
+
+. bin/build
+
+echo
+permnote "Build tests…"
+
+PROJECT_TEST_SUITE="tests"
+
+
+permnote "Building tests…"
+c++ \
+    ${PROJECT_CXX_FLAGS} \
+    ${PROJECT_LINKS_WITH} \
+    -o "${PROJECT_BUILD_DIR}/${PROJECT_TEST_SUITE}" \
+    "src/utils.cc" \
+    "src/procstat.cc" \
+    "src/kvm.cc" \
+    "src/tests.cc"
+
+echo
+note "Run tests…"
+# lldb -w -f
+"${PROJECT_BUILD_DIR}/${PROJECT_TEST_SUITE}"
+echo
+
+note "Tests completed."
+exit 0
