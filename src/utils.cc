@@ -6,32 +6,32 @@ const char* Kvmpro::protocol_to_string(int domain, int type, int protocol) {
         case AF_INET:
         case AF_INET6:
             switch (protocol) {
-            case IPPROTO_TCP:
-                return ("TCP");
-            case IPPROTO_UDP:
-                return ("UDP");
-            case IPPROTO_ICMP:
-                return ("ICM");
-            case IPPROTO_RAW:
-                return ("RAW");
-            case IPPROTO_SCTP:
-                return ("SCT");
-            case IPPROTO_DIVERT:
-                return ("IPD");
-            default:
-                return ("IP?");
+                case IPPROTO_TCP:
+                    return ("TCP");
+                case IPPROTO_UDP:
+                    return ("UDP");
+                case IPPROTO_ICMP:
+                    return ("ICM");
+                case IPPROTO_RAW:
+                    return ("RAW");
+                case IPPROTO_SCTP:
+                    return ("SCT");
+                case IPPROTO_DIVERT:
+                    return ("IPD");
+                default:
+                    return ("IP_");
             }
         case AF_LOCAL:
             switch (type) {
-            case SOCK_STREAM:
-                return ("UDS");
-            case SOCK_DGRAM:
-                return ("UDD");
-            default:
-                return ("UD?");
+                case SOCK_STREAM:
+                    return ("UDS");
+                case SOCK_DGRAM:
+                    return ("UDD");
+                default:
+                    return ("UD_");
             }
         default:
-            return ("?");
+            return ("___");
     }
 }
 
