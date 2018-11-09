@@ -48,6 +48,7 @@
     #include <sys/capability.h>
     #include <libprocstat.h>
     #include <libutil.h>
+    #include <net/if_dl.h>
     #define ord(c) ((int)(unsigned char)(c))
 #endif
 
