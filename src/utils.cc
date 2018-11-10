@@ -38,59 +38,44 @@ const char* Kvmpro::protocol_to_string(int domain, int type, int protocol) {
 
 const char* Kvmpro::addr_to_string(struct sockaddr_storage *ss) {
     char portstr[7];
-    char buffer2[INET6_ADDRSTRLEN];
     char str[512];
+    char stripv6[INET6_ADDRSTRLEN];
     struct sockaddr_in6 *sin6;
     struct sockaddr_in *sin;
     struct sockaddr_un *sun;
     struct sockaddr_dl *sdl;
     stringstream out;
     switch (ss->ss_family) {
-        case 255: {
-            int addr_no = 0;
-            sin = (struct sockaddr_in *)ss;
-            while(sin->sin_addr.s_addr & (0x800000 >> addr_no)) addr_no++;
-            sprintf(str,"/%d", addr_no);
-            out << str;
-            break;
-        }
+        // case 255: {
+        //     int addr_no = 0;
+        //     sin = (struct sockaddr_in *)ss;
+        //     while(sin->sin_addr.s_addr & (0x800000 >> addr_no)) addr_no++;
+        //     sprintf(str,"/%d", addr_no);
+        //     out << str;
+        //     break;
+        // }
 
         case AF_LOCAL: {
             sun = (struct sockaddr_un *)ss;
             if (sun->sun_path[0] == 0)
-                out << "/No/Path";
+                out << "*";
             else
                 out << sun->sun_path;
             break;
         }
 
-        case AF_UNSPEC:
         case AF_INET: {
             sin = (struct sockaddr_in *)ss;
             if (ntohs(sin->sin_port) != 0) {
-                snprintf(portstr, sizeof(portstr), ":%d", ntohs(sin->sin_port));
+                snprintf(portstr, sizeof(portstr), "%d", ntohs(sin->sin_port));
             } else {
-                snprintf(portstr, sizeof(portstr), ":%s", "0");
+                snprintf(portstr, sizeof(portstr), "%d", 0);
             }
             if (inet_ntop(AF_INET, &sin->sin_addr, str, sizeof(str)) != NULL) {
-                out << str << portstr;
+                out << str << ":" << portstr;
             } else {
-                out << "0.0.0.0:0";
+                out << "0.0.0.0" << ":" << portstr;
             }
-            break;
-        }
-
-        case AF_INET6: {
-            sin6 = (struct sockaddr_in6 *)ss;
-            if (ntohs(sin->sin_port) != 0) {
-                snprintf(portstr, sizeof(portstr), ":%d", ntohs(sin->sin_port));
-            } else {
-                snprintf(portstr, sizeof(portstr), ":%s", "0");
-            }
-            if (inet_ntop(AF_INET6, &sin6->sin6_addr, buffer2, sizeof(buffer2)) != NULL)
-                out << "[" << buffer2 << "]" << portstr;
-            else
-                out << "[::1]" << portstr;
             break;
         }
 
@@ -105,9 +90,23 @@ const char* Kvmpro::addr_to_string(struct sockaddr_storage *ss) {
             break;
         }
 
-        default:
-            out << "*:*";
+        case AF_INET6: {
+            sin6 = (struct sockaddr_in6 *)ss;
+            if (ntohs(sin6->sin6_port) != 0) {
+                snprintf(portstr, sizeof(portstr), "%d", ntohs(sin6->sin6_port));
+            } else {
+                snprintf(portstr, sizeof(portstr), "%d", 0);
+            }
+            if (inet_ntop(AF_INET6, &sin6->sin6_addr, stripv6, sizeof(stripv6)) != NULL)
+                out << "[" << stripv6 << "]" << ":" << portstr;
+            else
+                out << "[::1]" << ":" << portstr;
             break;
+        }
+
+        case AF_UNSPEC:
+        default:
+            out << "0.0.0.0" << ":" << "0";
     }
     return out.str().c_str();
 }
