@@ -37,9 +37,9 @@ const char* Kvmpro::protocol_to_string(int domain, int type, int protocol) {
 
 
 const char* Kvmpro::addr_to_string(struct sockaddr_storage *ss) {
-    char str[128];
     char portstr[7];
     char buffer2[INET6_ADDRSTRLEN];
+    char str[512];
     struct sockaddr_in6 *sin6;
     struct sockaddr_in *sin;
     struct sockaddr_un *sun;
