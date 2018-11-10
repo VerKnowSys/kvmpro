@@ -36,9 +36,9 @@ const char* Kvmpro::get_process_usage(int uid) {
         unsigned int cnt = 0;
         struct procstat* procstat = procstat_open_sysctl();
         struct kinfo_proc* kproc = procstat_getprocs(procstat, KERN_PROC_PID, procs->ki_pid, &cnt);
-        string netinfo = "";
+        string statinfo = "";
         if (cnt != 0)
-            netinfo = procstat_files(procstat, kproc);
+            statinfo = procstat_files(procstat, kproc);
         procstat_freeprocs(procstat, kproc);
         procstat_close(procstat);
         procstat = NULL;
@@ -59,7 +59,7 @@ const char* Kvmpro::get_process_usage(int uid) {
             << "\"blk-out\":" << (procs->ki_rusage.ru_oublock) << ","
             << "\"thr\":" << (procs->ki_numthreads) << ","
             << "\"pri-nrml\":" << ord(procs->ki_pri.pri_level) << ","
-            << "\"netinfo\":\"" << escape_json(netinfo) << "\"}";
+            << "\"statinfo\":\"" << escape_json(statinfo) << "\"}";
         if (i == count - 1) {
             out << "]";
         } else {
