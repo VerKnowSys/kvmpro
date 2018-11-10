@@ -19,7 +19,7 @@ const char* Kvmpro::protocol_to_string(int domain, int type, int protocol) {
                 case IPPROTO_DIVERT:
                     return ("IPD");
                 default:
-                    return ("IP_");
+                    return ("IP?");
             }
         case AF_LOCAL:
             switch (type) {
@@ -28,10 +28,10 @@ const char* Kvmpro::protocol_to_string(int domain, int type, int protocol) {
                 case SOCK_DGRAM:
                     return ("UDD");
                 default:
-                    return ("UD_");
+                    return ("UD?");
             }
         default:
-            return ("___");
+            return ("LOC");
     }
 }
 
