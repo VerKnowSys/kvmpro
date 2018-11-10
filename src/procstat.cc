@@ -23,20 +23,13 @@ const char* Kvmpro::procstat_files(struct procstat *procstat, struct kinfo_proc 
                 kipp = NULL;
                 return "{\"status\": \"Failure on: procstat_get_socket_info(…)\"}";
             }
-            if ((sock.dom_family == AF_INET) || (sock.dom_family == AF_INET6)) { // only INET domain
-                out << protocol_to_string(sock.dom_family, sock.type, sock.proto) << " ";
-                if (sock.dom_family == AF_LOCAL) {
-                    struct sockaddr_un *sun = (struct sockaddr_un *)&sock.sa_local;
-                    if (sun->sun_path[0] != 0)
-                        out << addr_to_string(&sock.sa_local);
-                    else
-                        out << addr_to_string(&sock.sa_peer);
-                    out << ", ";
-                    sun = NULL;
-                } else {
-                    out << addr_to_string(&sock.sa_local);
-                }
-            }
+            // Write protocol and data:
+            out << " "
+                << protocol_to_string(sock.dom_family, sock.type, sock.proto)
+                << "="
+                << addr_to_string(&sock.sa_local)
+                << "->"
+                << addr_to_string(&sock.sa_peer);
         }
     }
     procstat_freefiles(procstat, head);
