@@ -82,8 +82,6 @@ class Kvmpro {
         static const char* addr_to_string(struct sockaddr_storage *ss);
         static const char* protocol_to_string(int domain, int type, int protocol);
         static const char* procstat_files(struct procstat *procstat, struct kinfo_proc *kipp); // NOTE: Very FreeBSD specific:
-        static const bool invalid_char(char c);
-        static const void strip_unicode(string& str);
 
     public:
         EXPORT_SHARED_OBJECT static const char* get_process_usage(int uid);
