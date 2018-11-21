@@ -37,14 +37,6 @@
 #include <dirent.h>
 
 
-#ifdef __APPLE__
-    #error "Darwin is not supported as production platform."
-#endif
-
-#ifdef __linux__
-    #error "Linux is not supported as production platform."
-#endif
-
 #ifdef __FreeBSD__
     #include <kvm.h>
     #include <sys/capability.h>
@@ -52,6 +44,26 @@
     #include <libutil.h>
     #include <net/if_dl.h>
     #define ord(c) ((int)(unsigned char)(c))
+#elif __sun
+    #error "Solaris/Illumos is not supported as production platform."
+#elif __linux__
+    #error "Linux is not supported as production platform."
+#elif __osf__
+    #error "Tru64 is not supported as production platform."
+#elif __sgi
+    #error "Irix is not supported as production platform."
+#elif _AIX
+    #error "AIX is not supported as production platform."
+#elif __hpux
+    #error "HP-UX is not supported as production platform."
+#elif __OpenBSD__
+    #error "OpenBSD is not supported as production platform."
+#elif __NetBSD__
+    #error "NetBSD is not supported as production platform."
+#elif __APPLE__
+    #error "Darwin is not supported as production platform."
+#else
+    #error "Unsupported unknown platform."
 #endif
 
 
