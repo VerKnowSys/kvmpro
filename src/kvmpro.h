@@ -66,14 +66,11 @@
     #error "Unsupported unknown platform."
 #endif
 
+#define EXPORT_SHARED_OBJECT __attribute__ ((visibility("default")))
+
 
 using namespace std;
 
-
-/* Public functions */
-
-
-#define EXPORT_SHARED_OBJECT __attribute__ ((visibility("default")))
 
 class Kvmpro {
 
