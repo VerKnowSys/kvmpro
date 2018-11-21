@@ -1,7 +1,7 @@
 #include "kvmpro.h"
 
 
-const char* Kvmpro::get_process_usage(int uid) {
+const char* get_process_usage(int uid) {
     string command, output;
     int count = 0;
     char** args = NULL;
@@ -76,7 +76,7 @@ const char* Kvmpro::get_process_usage(int uid) {
 }
 
 
-const char* Kvmpro::get_process_usage_short(int uid) {
+const char* get_process_usage_short(int uid) {
     string output;
     int count = 0;
     char** args = NULL;

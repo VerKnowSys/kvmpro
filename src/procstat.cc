@@ -1,7 +1,7 @@
 #include "kvmpro.h"
 
 
-const char* Kvmpro::procstat_files(struct procstat *procstat, struct kinfo_proc *kipp) {
+const char* procstat_files(struct procstat *procstat, struct kinfo_proc *kipp) {
     stringstream out;
     struct sockstat sock;
     struct filestat_list *head;
