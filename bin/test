@@ -19,11 +19,29 @@ c++ \
     "src/kvm.cc" \
     "src/tests.cc"
 
+if [ "leaks" = "${1}" ]; then
+    c++ \
+        ${PROJECT_CXX_FLAGS} \
+        ${PROJECT_LINKS_WITH} \
+        -o "${PROJECT_BUILD_DIR}/${PROJECT_TEST_SUITE}_leak" \
+        "src/utils.cc" \
+        "src/procstat.cc" \
+        "src/kvm.cc" \
+        "src/tests_leak.cc"
+fi
+
 echo
 note "Run tests…"
 # lldb -w -f
 "${PROJECT_BUILD_DIR}/${PROJECT_TEST_SUITE}"
 echo
+
+if [ "leaks" = "${1}" ]; then
+    echo
+    note "Run tests_leak…"
+    "${PROJECT_BUILD_DIR}/${PROJECT_TEST_SUITE}_leak"
+    echo
+fi
 
 note "Tests completed."
 exit 0
