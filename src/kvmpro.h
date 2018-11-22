@@ -81,6 +81,9 @@ extern "C" {
     const char* addr_to_string(struct sockaddr_storage *ss);
     const char* get_process_usage(int uid);
     const char* get_process_usage_short(int uid);
+
+    const char* get_process_usage(uid_t uid);
+    const char* get_process_usage_short(uid_t uid);
 }
 
 
