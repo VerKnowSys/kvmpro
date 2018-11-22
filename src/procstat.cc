@@ -11,21 +11,22 @@ const char* procstat_files(struct procstat *procstat, struct kinfo_proc *kipp) {
     if (head == NULL) {
         fst = NULL;
         kipp = NULL;
-        return "{\"status\": \"Failure on: procstat_getfiles(…)\"}";
+        return "{\"status\": \"Failure of: procstat_files()\"}";
     }
 
     STAILQ_FOREACH(fst, head, next) {
-        if (fst->fs_type == PS_FST_TYPE_SOCKET) { // only sockets
+        if (fst->fs_type == PS_FST_TYPE_SOCKET) {
             if (procstat_get_socket_info(procstat, fst, &sock, NULL) != 0) {
                 procstat_freefiles(procstat, head);
                 head = NULL;
                 fst = NULL;
                 kipp = NULL;
-                return "{\"status\": \"Failure on: procstat_get_socket_info(…)\"}";
+                return "{\"status\": \"Failure of: procstat_get_socket_info()\"}";
             }
-            // Write protocol and data:
-            out << " "
-                << protocol_to_string(sock.dom_family, sock.type, sock.proto)
+            // Write protocol and process details:
+            if (out.str().length() > 0)
+                out << " ";
+            out << protocol_to_string(sock.dom_family, sock.type, sock.proto)
                 << "="
                 << addr_to_string(&sock.sa_local)
                 << "->"
