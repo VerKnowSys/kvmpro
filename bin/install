@@ -1,0 +1,13 @@
+#!/bin/sh
+# blame: @dmilith
+# 2018-11-22-0136-1542846966
+
+
+. bin/build
+
+install -v lib/libkvmpro.a /usr/lib/ && \
+install -v lib/libkvmpro.so /usr/lib/ && \
+    echo && note "Library installed successfully." && \
+        exit 0
+
+exit 1
