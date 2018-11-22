@@ -4,8 +4,8 @@
 */
 
 
-#ifndef __CORE__
-#define __CORE__
+#ifndef __KVM_PRO__
+#define __KVM_PRO__
 
 
 #define KVMPRO_VERSION "0.2.0"
