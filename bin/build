@@ -66,6 +66,8 @@ note "Link static-object with system libraries: $(distn "${PROJECT_LINKS_WITH}")
 ar \
     -cvq "${PROJECT_PREFIX}/${PROJECT_LIBRARY_NAME%.so}.a" \
     ${PROJECT_BUILD_DIR}/*.o
+ranlib \
+    "${PROJECT_PREFIX}/${PROJECT_LIBRARY_NAME%.so}.a"
 
 echo
 note "Strip all symbols…"
