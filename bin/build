@@ -2,20 +2,8 @@
 # blame: @dmilith
 # 2018-11-09-0400-1541732403
 
+. bin/loader
 
-_loader="/Software/Sofin/share/loader"
-if [ ! -f "${_loader}" ]; then
-    echo "This scripts requires Sofin-Installer to be available in system!"
-    exit 1
-else
-    . /Software/Sofin/share/loader
-    echo
-    note "Sofin library has been loaded…"
-fi
-
-if [ "FreeBSD" != "${SYSTEM_NAME}" ]; then
-    error "Platform unsupported: $(distn "${SYSTEM_NAME}")"
-fi
 
 # Only for FreeBSD-compatible operating systems! Will just crash on other systems (if their "compiler tripple" has different value)
 ONLY_FOR_ELF64="elf_x86_64_fbsd"
