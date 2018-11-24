@@ -9,13 +9,22 @@ const char* procstat_files(struct procstat *procstat, struct kinfo_proc *kipp) {
 
     head = procstat_getfiles(procstat, kipp, 0);
     if (head == NULL) {
+        if (kipp)
+            procstat_freeprocs(procstat, kipp);
+        if (procstat)
+            procstat_close(procstat);
         return "{\"status\": \"Failure of: procstat_files()\"}";
     }
 
     STAILQ_FOREACH(fst, head, next) {
         if (fst->fs_type == PS_FST_TYPE_SOCKET) {
             if (procstat_get_socket_info(procstat, fst, &sock, NULL) != 0) {
-                procstat_freefiles(procstat, head);
+                if (head)
+                    procstat_freefiles(procstat, head);
+                if (kipp)
+                    procstat_freeprocs(procstat, kipp);
+                if (procstat)
+                    procstat_close(procstat);
                 return "{\"status\": \"Failure of: procstat_get_socket_info()\"}";
             }
             // Write protocol and process details:
@@ -28,6 +37,12 @@ const char* procstat_files(struct procstat *procstat, struct kinfo_proc *kipp) {
                 << addr_to_string(&sock.sa_peer);
         }
     }
-    procstat_freefiles(procstat, head);
-    return out.str().c_str();
+    string ret_value = out.str();
+    if (head)
+        procstat_freefiles(procstat, head);
+    if (kipp)
+        procstat_freeprocs(procstat, kipp);
+    if (procstat)
+        procstat_close(procstat);
+    return ret_value.data();
 }

@@ -34,8 +34,6 @@ const char* get_process_usage(uid_t uid) {
         string statinfo = "";
         if (cnt != 0)
             statinfo = procstat_files(procstat, kproc);
-        procstat_freeprocs(procstat, kproc);
-        procstat_close(procstat);
 
         // Render JSON directly:
         if (i == 0) {
