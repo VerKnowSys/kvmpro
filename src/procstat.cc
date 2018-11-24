@@ -9,8 +9,6 @@ const char* procstat_files(struct procstat *procstat, struct kinfo_proc *kipp) {
 
     head = procstat_getfiles(procstat, kipp, 0);
     if (head == NULL) {
-        fst = NULL;
-        kipp = NULL;
         return "{\"status\": \"Failure of: procstat_files()\"}";
     }
 
@@ -18,9 +16,6 @@ const char* procstat_files(struct procstat *procstat, struct kinfo_proc *kipp) {
         if (fst->fs_type == PS_FST_TYPE_SOCKET) {
             if (procstat_get_socket_info(procstat, fst, &sock, NULL) != 0) {
                 procstat_freefiles(procstat, head);
-                head = NULL;
-                fst = NULL;
-                kipp = NULL;
                 return "{\"status\": \"Failure of: procstat_get_socket_info()\"}";
             }
             // Write protocol and process details:
@@ -34,9 +29,5 @@ const char* procstat_files(struct procstat *procstat, struct kinfo_proc *kipp) {
         }
     }
     procstat_freefiles(procstat, head);
-    head = NULL;
-    fst = NULL;
-    kipp = NULL;
-
     return out.str().c_str();
 }

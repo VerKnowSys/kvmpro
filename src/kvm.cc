@@ -9,17 +9,12 @@ const char* get_process_usage(uid_t uid) {
 
     kvm_t* kd = kvm_open(NULL, NULL, NULL, O_RDONLY, NULL);
     if (kd == NULL) {
-        args = NULL;
-        kd = NULL;
         return (char*)"{\"status\": \"Failure opening kernel KVM handle!\"}";
     }
 
     kinfo_proc* procs = kvm_getprocs(kd, KERN_PROC_UID, uid, &count); // get processes directly from BSD kernel
     if (count <= 0) {
-        procs = NULL;
         kvm_close(kd);
-        args = NULL;
-        kd = NULL;
         return (char*)"{\"status\": \"No processes for given UID!\"}";
     }
 
@@ -41,8 +36,6 @@ const char* get_process_usage(uid_t uid) {
             statinfo = procstat_files(procstat, kproc);
         procstat_freeprocs(procstat, kproc);
         procstat_close(procstat);
-        procstat = NULL;
-        kproc = NULL;
 
         // Render JSON directly:
         if (i == 0) {
@@ -65,13 +58,10 @@ const char* get_process_usage(uid_t uid) {
         } else {
             out << ",";
         }
-        args = NULL;
         output += out.str();
         procs++;
     }
     kvm_close(kd);
-    procs = NULL;
-    kd = NULL;
     return output.c_str();
 }
 
@@ -88,16 +78,12 @@ const char* get_process_usage_short(uid_t uid) {
     */
     kvm_t* kd = kvm_open(NULL, NULL, NULL, O_RDONLY, NULL);
     if (kd == NULL) {
-        args = NULL;
         return (char*)"{\"status\": \"Failure on kvm_open(…)\"}";
     }
 
     kinfo_proc* procs = kvm_getprocs(kd, KERN_PROC_UID, uid, &count); // get processes directly from BSD kernel
     if (count < 0) {
-        procs = NULL;
         kvm_close(kd);
-        args = NULL;
-        kd = NULL;
         return (char*)"{\"status\": \"Failure on: kvm_getprocs(…)\" }";
     }
 
@@ -113,15 +99,11 @@ const char* get_process_usage_short(uid_t uid) {
             << "\"ioout\":" << (procs->ki_rusage.ru_oublock) << ","
             << "\"rss\":" << (procs->ki_rssize * pagesize) << "}";
         if (i + 1 != count) out << ","; // if last element not detected add a comma
-        args = NULL;
         output += out.str();
         procs++;
     }
 
     kvm_close(kd);
-    procs = NULL;
-    kd = NULL;
-    args = NULL;
     output += "]}";
     return output.c_str();
 }
