@@ -1,0 +1,20 @@
+#
+# Sofin functions and environment autoloader.
+#
+# author: @dmilith
+
+_sofin_software_abspath="/Software/Sofin"
+_sofin_loader_abspath="${_sofin_software_abspath}/share/loader"
+if [ ! -f "${_sofin_loader_abspath}" ]; then
+    echo "Sofin has to be available in system! Please install it first from:"
+    echo "                                                             https://github.com/VerKnowSys/sofin"
+    exit 1
+else
+    . "${_sofin_loader_abspath}"
+    echo
+    note "Successfully loaded all Facts and Functions from: $(distn "${_sofin_software_abspath}/share/{funs, facts}/*.{fact,fun}")."
+fi
+
+if [ "FreeBSD" != "${SYSTEM_NAME}" ]; then
+    error "Platform unsupported: $(distn "${SYSTEM_NAME}")"
+fi
