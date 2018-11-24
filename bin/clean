@@ -3,4 +3,7 @@
 . bin/loader
 
 note "kvmpro: bin/clean: Removing: $(distn "obj/*.o") and $(distn "lib/*.{a, so}")"
-rm -rf "obj" "lib"
+rm -f \
+    lib/*.a \
+    lib/*.so \
+    obj/*
