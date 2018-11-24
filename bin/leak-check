@@ -1,0 +1,43 @@
+#!/bin/sh
+# blame: @dmilith
+
+
+touch .leak-check
+. bin/clean
+. bin/build
+
+
+echo
+note "Building tests with LeakSanitizer enabled…"
+
+# append sanitizer as last compiler argument:
+PROJECT_LEAK_CHECK="leaks"
+LEAK_CHECK_PRODUCT_BIN="${PROJECT_BUILD_DIR}/${PROJECT_LEAK_CHECK}-check"
+
+
+permnote "Leak-Check: CXXFLAGS: $(distn "${PROJECT_CXX_FLAGS}")"
+permnote "Leak-Check: LDFLAGS: $(distn "${PROJECT_LD_FLAGS}")"
+
+c++ \
+    ${PROJECT_CXX_FLAGS} \
+    ${PROJECT_LINKS_WITH} \
+    -o "${LEAK_CHECK_PRODUCT_BIN}" \
+    "src/utils.cc" \
+    "src/procstat.cc" \
+    "src/kvm.cc" \
+    "src/tests_leak.cc"
+
+
+echo
+note "Running bin: $(distn "${LEAK_CHECK_PRODUCT_BIN}")"
+
+# ASAN_OPTIONS=help=1 \
+ASAN_OPTIONS=color=always:halt_on_error=0:verbosity=8:debug=0:replace_str=1:intercept_strlen=1:print_cmdline=1:print_stats=1:symbolize_inline_frames=1:print_summary=1:verify_asan_link_order=0:can_use_proc_maps_statm=0:decorate_proc_maps=0:detect_stack_use_after_return=1:strict_string_checks=0:check_initialization_order=0:report_globals=1:dedup_token_length=1:malloc_context_size=64:detect_container_overflow=0:alloc_dealloc_mismatch=1:print_full_thread_history=1:new_delete_type_mismatch=1:fast_unwind_on_check=1:fast_unwind_on_fatal=1:fast_unwind_on_malloc=0:handle_ioctl=0:allow_addr2line=0:symbolize=1:external_symbolizer_path=/Software/Llvm/bin/llvm-symbolizer \
+    "${LEAK_CHECK_PRODUCT_BIN}" \
+        || exit 1
+
+# lldb -f "${LEAK_CHECK_PRODUCT_BIN}" \
+rm -f .leak-check
+echo
+note "Leaks-Check finished."
+exit 0
