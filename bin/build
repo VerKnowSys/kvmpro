@@ -17,7 +17,7 @@ PROJECT_BUILD_DIR="obj"
 
 # Use Sofin variables with compiler setup:
 PROJECT_CXX_FLAGS="-fPIC ${HARDEN_CFLAGS} ${HARDEN_CFLAGS_PRODUCTION} ${CMACROS} ${RETPOLINE_CFLAGS} ${HARDEN_CMACROS} ${HARDEN_OFLOW_CFLAGS} -Wno-unused-command-line-argument"
-PROJECT_LD_FLAGS="-m ${ONLY_FOR_ELF64} -fuse-ld=lld -flto -shared -z retpolineplt ${HARDEN_LDFLAGS_PRODUCTION}"
+PROJECT_LD_FLAGS="-m ${ONLY_FOR_ELF64} -fuse-ld=lld -flto=4 -shared -z retpolineplt ${HARDEN_LDFLAGS_PRODUCTION}"
 
 # Link project with all required system libraries:
 PROJECT_LINKS_WITH="-lc -lc++ -lgcc_s -lkvm -lprocstat"
@@ -29,8 +29,8 @@ unset ASAN_OPTIONS
 echo
 if [ -f ".leak-check" ]; then
     permnote "Leak-Check and Debug mode enabled!"
-    PROJECT_CXX_FLAGS="${PROJECT_CXX_FLAGS} -glldb -gcodeview -O1 -fsanitize=address -fno-omit-frame-pointer -fno-optimize-sibling-calls -fsanitize-recover=address -fsanitize-address-use-after-scope"
-    PROJECT_LD_FLAGS="${PROJECT_LD_FLAGS} -O1 -fsanitize=address -fno-omit-frame-pointer -fno-optimize-sibling-calls -fsanitize-recover=address -fsanitize-address-use-after-scope"
+    PROJECT_CXX_FLAGS="-O1 -g -gline-tables-only -fno-omit-frame-pointer -fno-optimize-sibling-calls -fsanitize-recover=address -fsanitize-address-use-after-scope -fdebug-types-section -fdebug-macro -fdiagnostics-color -fstandalone-debug -fsanitize=address -fdelayed-template-parsing ${PROJECT_CXX_FLAGS}"
+    PROJECT_LD_FLAGS="-O1 -fno-omit-frame-pointer -fno-optimize-sibling-calls -fsanitize-recover=address -fsanitize-address-use-after-scope -fdebug-types-section -fsanitize=address ${PROJECT_LD_FLAGS}"
 
 else
     permnote "Production mode enabled!"
