@@ -16,20 +16,30 @@ PROJECT_PREFIX="lib"
 PROJECT_BUILD_DIR="obj"
 
 # Use Sofin variables with compiler setup:
-PROJECT_CXX_FLAGS="-O3 -fuse-ld=lld -fPIC ${HARDEN_CFLAGS} ${HARDEN_CFLAGS_PRODUCTION} ${CMACROS} ${RETPOLINE_CFLAGS} ${HARDEN_CMACROS} ${HARDEN_OFLOW_CFLAGS} -Wno-unused-command-line-argument"
-PROJECT_LD_FLAGS="-m ${ONLY_FOR_ELF64} -fuse-ld=lld -shared -z retpolineplt ${HARDEN_LDFLAGS_PRODUCTION}"
+PROJECT_CXX_FLAGS="-fPIC ${HARDEN_CFLAGS} ${HARDEN_CFLAGS_PRODUCTION} ${CMACROS} ${RETPOLINE_CFLAGS} ${HARDEN_CMACROS} ${HARDEN_OFLOW_CFLAGS} -Wno-unused-command-line-argument"
+PROJECT_LD_FLAGS="-m ${ONLY_FOR_ELF64} -fuse-ld=lld -flto -shared -z retpolineplt ${HARDEN_LDFLAGS_PRODUCTION}"
 
 # Link project with all required system libraries:
 PROJECT_LINKS_WITH="-lc -lc++ -lgcc_s -lkvm -lprocstat"
 
+# unset for production (default):
+unset ASAN_OPTIONS
 
-# Wipe old Project objects:
-rm -f \
-    ${PROJECT_PREFIX}/*.a \
-    ${PROJECT_PREFIX}/*.so \
-    ${PROJECT_BUILD_DIR}/*.o
-mkdir \
-    -p \
+# if leak-check file trigger exists - we're in memory-leak-check mode.
+echo
+if [ -f ".leak-check" ]; then
+    permnote "Leak-Check and Debug mode enabled!"
+    PROJECT_CXX_FLAGS="${PROJECT_CXX_FLAGS} -glldb -gcodeview -O1 -fsanitize=address -fno-omit-frame-pointer -fno-optimize-sibling-calls -fsanitize-recover=address -fsanitize-address-use-after-scope"
+    PROJECT_LD_FLAGS="${PROJECT_LD_FLAGS} -O1 -fsanitize=address -fno-omit-frame-pointer -fno-optimize-sibling-calls -fsanitize-recover=address -fsanitize-address-use-after-scope"
+
+else
+    permnote "Production mode enabled!"
+    PROJECT_CXX_FLAGS="-g -O3 ${PROJECT_CXX_FLAGS}"
+fi
+
+
+# Create Project build and library dirs:
+mkdir -p \
     "${PROJECT_PREFIX}" \
     "${PROJECT_BUILD_DIR}"
 
