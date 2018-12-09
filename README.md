@@ -30,11 +30,11 @@
 - `const char* get_process_usage(uid_t uid);` - returns JSON list with detailed information
     about all processes, (of given user uid). Including: sockets, TCP, UDP, bound addresses,
     ports, protocols and other details. Full list contains fields: "pid", "ppid", "name", "cmd",
-    "rss", "mrss", "runtime", "blk", "blk", "thr", "pri" and "statinfo".
+    "rss", "mrss", "runtime", "blk_in", "blk_out", "nthr", "pri_level" and "stat_info".
 
 - `const char* get_process_usage_short(uid_t uid);` - returns JSON list with short information
     about all processes (running as given user uid). Short list contains only fields: "cmd",
-    "pid", "ppid", "runt", "ioin", "ioout" and "rss".
+    "pid", "ppid", "runtime", "blk_in", "blk_out" and "rss".
 
 
 
