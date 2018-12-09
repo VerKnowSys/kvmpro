@@ -46,11 +46,11 @@ const char* get_process_usage(uid_t uid) {
             << "\"rss\":" << (procs->ki_rssize * pagesize) << ","
             << "\"mrss\":" << (procs->ki_rusage.ru_maxrss * pagesize) << ","
             << "\"runtime\":" << (procs->ki_runtime / 1000) << ","
-            << "\"blk-in\":" << (procs->ki_rusage.ru_inblock) << ","
-            << "\"blk-out\":" << (procs->ki_rusage.ru_oublock) << ","
-            << "\"thr\":" << (procs->ki_numthreads) << ","
-            << "\"pri-nrml\":" << ord(procs->ki_pri.pri_level) << ","
-            << "\"statinfo\":\"" << escape_json(statinfo) << "\"}";
+            << "\"blk_in\":" << (procs->ki_rusage.ru_inblock) << ","
+            << "\"blk_out\":" << (procs->ki_rusage.ru_oublock) << ","
+            << "\"nthr\":" << (procs->ki_numthreads) << ","
+            << "\"pri_level\":" << ord(procs->ki_pri.pri_level) << ","
+            << "\"stat_info\":\"" << escape_json(statinfo) << "\"}";
         if (i == count - 1) {
             out << "]";
         } else {
@@ -92,9 +92,9 @@ const char* get_process_usage_short(uid_t uid) {
         out << "{\"cmd\":\"" << (procs->ki_comm) << "\","
             << "\"pid\":" << (procs->ki_pid) << ","
             << "\"ppid\":" << (procs->ki_ppid) << ","
-            << "\"runt\":" << (procs->ki_runtime / 1000) << ","
-            << "\"ioin\":" << (procs->ki_rusage.ru_inblock) << ","
-            << "\"ioout\":" << (procs->ki_rusage.ru_oublock) << ","
+            << "\"runtime\":" << (procs->ki_runtime / 1000) << ","
+            << "\"blk_in\":" << (procs->ki_rusage.ru_inblock) << ","
+            << "\"blk_out\":" << (procs->ki_rusage.ru_oublock) << ","
             << "\"rss\":" << (procs->ki_rssize * pagesize) << "}";
         if (i + 1 != count) out << ","; // if last element not detected add a comma
         output += out.str();
