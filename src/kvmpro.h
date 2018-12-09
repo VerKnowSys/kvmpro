@@ -39,7 +39,6 @@
 
 #ifdef __FreeBSD__
     #include <kvm.h>
-    #include <sys/capability.h>
     #include <libprocstat.h>
     #include <libutil.h>
     #include <net/if_dl.h>
