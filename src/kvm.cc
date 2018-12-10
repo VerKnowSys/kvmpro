@@ -9,14 +9,14 @@ const char* get_process_usage(uid_t uid) {
 
     kvm_t* kd = kvm_open(NULL, NULL, NULL, O_RDONLY, NULL);
     if (kd == NULL) {
-        return (const char*)"{\"status\": \"Failure opening kernel KVM handle!\"}";
+        return (const char*)"{\"status\": \"Failure opening kernel KVM handle!\", \"list\": []}";
     }
 
     kinfo_proc* procs = kvm_getprocs(kd, KERN_PROC_UID, uid, &count); // get processes directly from BSD kernel
     if (count <= 0) {
         if (kd)
             kvm_close(kd);
-        return (const char*)"{\"status\": \"No processes for given UID!\"}";
+        return (const char*)"{\"status\": \"No processes for given UID!\", \"list\": []}";
     }
 
     for (int i = 0; i < count; ++i) {
@@ -43,7 +43,7 @@ const char* get_process_usage(uid_t uid) {
 
         // Render JSON directly:
         if (i == 0) {
-            out << "[";
+            out << "{\"status\": \"Full process list ready.\", \"list\": [";
         }
         out << "{\"pid\":" << (procs->ki_pid) << ","
             << "\"ppid\":" << (procs->ki_ppid) << ","
@@ -58,7 +58,7 @@ const char* get_process_usage(uid_t uid) {
             << "\"pri_level\":" << ord(procs->ki_pri.pri_level) << ","
             << "\"stat_info\":\"" << escape_json(statinfo) << "\"}";
         if (i == count - 1) {
-            out << "]";
+            out << "]}";
         } else {
             out << ",";
         }
@@ -81,14 +81,14 @@ const char* get_process_usage_short(uid_t uid) {
     */
     kvm_t* kd = kvm_open(NULL, NULL, NULL, O_RDONLY, NULL);
     if (kd == NULL) {
-        return (const char*)"{\"status\": \"Failure on kvm_open(…)\"}";
+        return (const char*)"{\"status\": \"Failure on kvm_open()\", \"list\": []}";
     }
 
     kinfo_proc* procs = kvm_getprocs(kd, KERN_PROC_UID, uid, &count); // get processes directly from BSD kernel
     if (count < 0) {
         if (kd)
             kvm_close(kd);
-        return (const char*)"{\"status\": \"Failure on: kvm_getprocs(…)\" }";
+        return (const char*)"{\"status\": \"Failure on: kvm_getprocs()\", \"list\": []}";
     }
 
     output += "{\"status\": \"Process list ready.\", \"list\": [";
