@@ -19,12 +19,13 @@ const char* get_process_usage(const uid_t uid) {
     output << "{\"status\": \"Full process list ready.\", \"list\": [";
     for (int i = 0; i < proc_count; ++i) {
         string command = string("");
+        stringstream command;
         char** args = kvm_getargv(kd, procs, 0);
         for (int y = 0; (args != 0) && (args[y] != 0); y++)
             if (y == 0)
-                command = string(args[y]);
+                command << string(args[y]);
             else
-                command += " " + string(args[y]);
+                command << " " << string(args[y]);
 
         unsigned int cnt = 0;
         struct procstat* procstat = procstat_open_sysctl();
@@ -43,7 +44,7 @@ const char* get_process_usage(const uid_t uid) {
         output << "{\"pid\":" << (procs->ki_pid) << ","
             << "\"ppid\":" << (procs->ki_ppid) << ","
             << "\"name\":\"" << escape_json(procs->ki_comm) << "\","
-            << "\"cmd\":\"" << escape_json(command) << "\","
+            << "\"cmd\":\"" << escape_json(command.str()) << "\","
             << "\"rss\":" << (procs->ki_rssize * getpagesize()) << ","
             << "\"mrss\":" << (procs->ki_rusage.ru_maxrss * getpagesize()) << ","
             << "\"runtime\":" << (procs->ki_runtime / 1000) << ","
