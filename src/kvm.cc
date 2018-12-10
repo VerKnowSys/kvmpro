@@ -18,7 +18,6 @@ const char* get_process_usage(const uid_t uid) {
     stringstream output;
     output << "{\"status\": \"Full process list ready.\", \"list\": [";
     for (int i = 0; i < proc_count; ++i) {
-        string command = string("");
         stringstream command;
         char** args = kvm_getargv(kd, procs, 0);
         for (int y = 0; (args != 0) && (args[y] != 0); y++)
@@ -34,7 +33,7 @@ const char* get_process_usage(const uid_t uid) {
                 kvm_close(kd);
             return (const char*)"{\"status\": \"Failure opening procstat_open_sysctl()!\"}";
         }
-        string statinfo = string("");
+        string statinfo = string();
         struct kinfo_proc* kproc = procstat_getprocs(procstat, KERN_PROC_PID, procs->ki_pid, &cnt);
         if (kproc != NULL && cnt > 0) {
             statinfo = escape_json(procstat_files(procstat, kproc));
