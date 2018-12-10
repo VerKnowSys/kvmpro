@@ -14,7 +14,8 @@ const char* get_process_usage(uid_t uid) {
 
     kinfo_proc* procs = kvm_getprocs(kd, KERN_PROC_UID, uid, &count); // get processes directly from BSD kernel
     if (count <= 0) {
-        kvm_close(kd);
+        if (kd)
+            kvm_close(kd);
         return (const char*)"{\"status\": \"No processes for given UID!\"}";
     }
 
@@ -59,7 +60,8 @@ const char* get_process_usage(uid_t uid) {
         output += out.str();
         procs++;
     }
-    kvm_close(kd);
+    if (kd)
+        kvm_close(kd);
     return (const char*)output.data();
 }
 
@@ -79,7 +81,8 @@ const char* get_process_usage_short(uid_t uid) {
 
     kinfo_proc* procs = kvm_getprocs(kd, KERN_PROC_UID, uid, &count); // get processes directly from BSD kernel
     if (count < 0) {
-        kvm_close(kd);
+        if (kd)
+            kvm_close(kd);
         return (const char*)"{\"status\": \"Failure on: kvm_getprocs(…)\" }";
     }
 
@@ -98,8 +101,8 @@ const char* get_process_usage_short(uid_t uid) {
         output += out.str();
         procs++;
     }
-
-    kvm_close(kd);
+    if (kd)
+        kvm_close(kd);
     output += "]}";
     return (const char*)output.data();
 }
