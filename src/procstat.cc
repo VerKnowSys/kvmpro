@@ -13,6 +13,8 @@ const string procstat_files(struct procstat *procstat, struct kinfo_proc *kipp) 
     STAILQ_FOREACH(fst, list_head, next) {
         if (fst->fs_type == PS_FST_TYPE_SOCKET) {
             if (procstat_get_socket_info(procstat, fst, &sock, NULL) != 0) {
+                if (list_head)
+                    procstat_freefiles(procstat, list_head);
                 return string("{\"status\": \"Failure of: procstat_get_socket_info()\"}");
             }
             // Write protocol and process details:
