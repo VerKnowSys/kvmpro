@@ -82,8 +82,8 @@ extern "C" {
     // Public Helpers:
     //
 
-    // convert given protocol to plain string:
-    EXPORT_SHARED_OBJECT char* protocol_to_string(int domain, int type, int protocol);
+// convert given protocol to plain string:
+const string protocol_to_string(const int domain, const int type, const int protocol);
 
     // convert given address to plain string:
     EXPORT_SHARED_OBJECT char* addr_to_string(struct sockaddr_storage *ss);

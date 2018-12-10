@@ -1,37 +1,37 @@
 #include "kvmpro.h"
 
 
-const char* protocol_to_string(int domain, int type, int protocol) {
+const string protocol_to_string(const int domain, const int type, const int protocol) {
     switch (domain) {
         case AF_INET:
         case AF_INET6:
             switch (protocol) {
                 case IPPROTO_TCP:
-                    return (const char*)"TCP";
+                    return string("TCP");
                 case IPPROTO_UDP:
-                    return (const char*)"UDP";
+                    return string("UDP");
                 case IPPROTO_ICMP:
-                    return (const char*)"ICM";
+                    return string("ICM");
                 case IPPROTO_RAW:
-                    return (const char*)"RAW";
+                    return string("RAW");
                 case IPPROTO_SCTP:
-                    return (const char*)"SCT";
+                    return string("SCT");
                 case IPPROTO_DIVERT:
-                    return (const char*)"IPD";
+                    return string("IPD");
                 default:
-                    return (const char*)"IP?";
+                    return string("IP?");
             }
         case AF_LOCAL:
             switch (type) {
                 case SOCK_STREAM:
-                    return (const char*)"UDS";
+                    return string("UDS");
                 case SOCK_DGRAM:
-                    return (const char*)"UDD";
+                    return string("UDD");
                 default:
-                    return (const char*)"UD?";
+                    return string("UD?");
             }
         default:
-            return (const char*)"LOC";
+            return string("LOC");
     }
 }
 
