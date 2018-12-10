@@ -9,14 +9,14 @@ const char* get_process_usage(const uid_t uid) {
 
     kvm_t* kd = kvm_open(NULL, NULL, NULL, O_RDONLY, NULL);
     if (kd == NULL) {
-        return (const char*)"{\"status\": \"Failure opening kernel KVM handle!\"}";
+        return (const char*)"{\"status\": \"Failure on: kvm_open()!\"}";
     }
 
     kinfo_proc* procs = kvm_getprocs(kd, KERN_PROC_UID, uid, &count); // get processes directly from BSD kernel
     if (count <= 0) {
         if (kd)
             kvm_close(kd);
-        return (const char*)"{\"status\": \"No processes for given UID!\"}";
+        return (const char*)"{\"status\": \"Failure on: kvm_getprocs()!\"}";
     }
 
     for (int i = 0; i < count; ++i) {
@@ -81,9 +81,8 @@ const char* get_process_usage_short(const uid_t uid) {
         kvm_t* kvm_open(const char *execfile, const char *corefile, const char *swapfile, int flags, const char *errstr);
     */
     kvm_t* kd = kvm_open(NULL, NULL, NULL, O_RDONLY, NULL);
-    if (kd == NULL) {
-        return (const char*)"{\"status\": \"Failure on kvm_open()\"}";
-    }
+    if (kd == NULL)
+        return (const char*)"{\"status\": \"Failure on: kvm_open()\"}";
 
     kinfo_proc* procs = kvm_getprocs(kd, KERN_PROC_UID, uid, &count); // get processes directly from BSD kernel
     if (count < 0) {
