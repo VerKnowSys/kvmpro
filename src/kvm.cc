@@ -81,7 +81,7 @@ const char* get_process_usage_short(const uid_t uid) {
     stringstream output;
     output << "{\"status\": \"Process list ready.\", \"list\": [";
     for (int i = 0; i < proc_count; ++i) {
-        char** args = kvm_getargv(kd, procs, 0);
+        kvm_getargv(kd, procs, 0);
         output << "{\"cmd\":\"" << (procs->ki_comm) << "\","
             << "\"pid\":" << (procs->ki_pid) << ","
             << "\"ppid\":" << (procs->ki_ppid) << ","
