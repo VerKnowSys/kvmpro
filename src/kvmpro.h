@@ -90,14 +90,18 @@ const string procstat_files(struct procstat *procstat, struct kinfo_proc *kipp);
 //
 
 
-// generates JSON of processes which belong to user with given "uid".
-// this list contains every process information available, including open sockets,
-// open network connections, protocols, bound addresses and ports.
-EXPORT_SHARED_OBJECT const string get_process_usage(const uid_t uid);
+extern "C" {
 
-// generates simplified JSON of processes which belong to user with given "uid".
-// (simplified data structure without "socketstat" field and additional, often rarely used fields).
-EXPORT_SHARED_OBJECT const string get_process_usage_short(const uid_t uid);
+    // generates JSON of processes which belong to user with given "uid".
+    // this list contains every process information available, including open sockets,
+    // open network connections, protocols, bound addresses and ports.
+    EXPORT_SHARED_OBJECT const string get_process_usage(const uid_t uid);
+
+    // generates simplified JSON of processes which belong to user with given "uid".
+    // (simplified data structure without "socketstat" field and additional, often rarely used fields).
+    EXPORT_SHARED_OBJECT const string get_process_usage_short(const uid_t uid);
+
+}
 
 
 #endif
