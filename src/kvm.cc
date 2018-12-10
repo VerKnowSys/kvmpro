@@ -1,10 +1,10 @@
 #include "kvmpro.h"
 
 
-const char* get_process_usage(const uid_t uid) {
+const string get_process_usage(const uid_t uid) {
     kvm_t* kd = kvm_open(NULL, NULL, NULL, O_RDONLY, NULL);
     if (kd == NULL) {
-        return (const char*)"{\"status\": \"Failure on: kvm_open()!\"}";
+        return string("{\"status\": \"Failure on: kvm_open()!\"}");
     }
 
     int proc_count = 0;
@@ -12,7 +12,7 @@ const char* get_process_usage(const uid_t uid) {
     if (proc_count <= 0) {
         if (kd)
             kvm_close(kd);
-        return (const char*)"{\"status\": \"Failure on: kvm_getprocs()!\"}";
+        return string("{\"status\": \"Failure on: kvm_getprocs()!\"}");
     }
 
     stringstream output;
@@ -31,7 +31,7 @@ const char* get_process_usage(const uid_t uid) {
         if (procstat == NULL) {
             if (kd)
                 kvm_close(kd);
-            return (const char*)"{\"status\": \"Failure opening procstat_open_sysctl()!\"}";
+            return string("{\"status\": \"Failure opening procstat_open_sysctl()!\"}");
         }
         string statinfo = string();
         struct kinfo_proc* kproc = procstat_getprocs(procstat, KERN_PROC_PID, procs->ki_pid, &cnt);
@@ -61,21 +61,21 @@ const char* get_process_usage(const uid_t uid) {
     }
     if (kd)
         kvm_close(kd);
-    return (const char*)output.str().data();
+    return output.str();
 }
 
 
-const char* get_process_usage_short(const uid_t uid) {
+const string get_process_usage_short(const uid_t uid) {
     kvm_t* kd = kvm_open(NULL, NULL, NULL, O_RDONLY, NULL);
     if (kd == NULL)
-        return (const char*)"{\"status\": \"Failure on: kvm_open()\"}";
+        return string("{\"status\": \"Failure on: kvm_open()\"}");
 
     int proc_count = 0;
     kinfo_proc* procs = kvm_getprocs(kd, KERN_PROC_UID, uid, &proc_count); // get processes directly from BSD kernel
     if ((procs == NULL) || (proc_count < 0)) {
         if (kd)
             kvm_close(kd);
-        return (const char*)"{\"status\": \"Failure on: kvm_getprocs()\"}";
+        return string("{\"status\": \"Failure on: kvm_getprocs()\"}");
     }
 
     stringstream output;
@@ -97,5 +97,5 @@ const char* get_process_usage_short(const uid_t uid) {
     output << "]}";
     if (kd)
         kvm_close(kd);
-    return (const char*)output.str().data();
+    return output.str();
 }
