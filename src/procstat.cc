@@ -13,7 +13,7 @@ const char* procstat_files(struct procstat *procstat, struct kinfo_proc *kipp) {
             procstat_freeprocs(procstat, kipp);
         if (procstat)
             procstat_close(procstat);
-        return "{\"status\": \"Failure of: procstat_files()\"}";
+        return (const char*)"{\"status\": \"Failure of: procstat_files()\"}";
     }
 
     STAILQ_FOREACH(fst, head, next) {
@@ -25,7 +25,7 @@ const char* procstat_files(struct procstat *procstat, struct kinfo_proc *kipp) {
                     procstat_freeprocs(procstat, kipp);
                 if (procstat)
                     procstat_close(procstat);
-                return "{\"status\": \"Failure of: procstat_get_socket_info()\"}";
+                return (const char*)"{\"status\": \"Failure of: procstat_get_socket_info()\"}";
             }
             // Write protocol and process details:
             if (out.str().length() > 0)
@@ -44,5 +44,5 @@ const char* procstat_files(struct procstat *procstat, struct kinfo_proc *kipp) {
         procstat_freeprocs(procstat, kipp);
     if (procstat)
         procstat_close(procstat);
-    return ret_value.data();
+    return (const char*)ret_value.data();
 }
