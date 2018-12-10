@@ -68,21 +68,19 @@ const char* get_process_usage_short(uid_t uid) {
     string output;
     int count = 0;
     char** args = NULL;
-    const int pagesize = getpagesize();
-    const int totalMem = pagesize * sysconf(_SC_PHYS_PAGES);
     /*
         NOTE: from header the prototype is:
         kvm_t* kvm_open(const char *execfile, const char *corefile, const char *swapfile, int flags, const char *errstr);
     */
     kvm_t* kd = kvm_open(NULL, NULL, NULL, O_RDONLY, NULL);
     if (kd == NULL) {
-        return (char*)"{\"status\": \"Failure on kvm_open(…)\"}";
+        return (const char*)"{\"status\": \"Failure on kvm_open(…)\"}";
     }
 
     kinfo_proc* procs = kvm_getprocs(kd, KERN_PROC_UID, uid, &count); // get processes directly from BSD kernel
     if (count < 0) {
         kvm_close(kd);
-        return (char*)"{\"status\": \"Failure on: kvm_getprocs(…)\" }";
+        return (const char*)"{\"status\": \"Failure on: kvm_getprocs(…)\" }";
     }
 
     output += "{\"status\": \"Process list ready.\", \"list\": [";
@@ -103,5 +101,5 @@ const char* get_process_usage_short(uid_t uid) {
 
     kvm_close(kd);
     output += "]}";
-    return output.c_str();
+    return (const char*)output.c_str();
 }
