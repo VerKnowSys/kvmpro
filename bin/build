@@ -33,7 +33,7 @@ if [ -f ".leak-check" ]; then
     PROJECT_LD_FLAGS="-O1 -fno-omit-frame-pointer -fno-optimize-sibling-calls -fsanitize-recover=address -fsanitize-address-use-after-scope -fdebug-types-section -fsanitize=address ${PROJECT_LD_FLAGS}"
 
 else
-    permnote "Production mode enabled!"
+    permnote "Build type: $(distn "Release")"
     PROJECT_CXX_FLAGS="-g -O3 ${PROJECT_CXX_FLAGS}"
 fi
 
