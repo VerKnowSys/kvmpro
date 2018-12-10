@@ -16,8 +16,9 @@ PROJECT_PREFIX="lib"
 PROJECT_BUILD_DIR="obj"
 
 # Use Sofin variables with compiler setup:
-PROJECT_CXX_FLAGS="-fPIC -std=c++11 -Wno-unused-command-line-argument ${HARDEN_OFLOW_CFLAGS} ${HARDEN_CFLAGS} ${HARDEN_CFLAGS_PRODUCTION} ${RETPOLINE_CFLAGS}"
-PROJECT_LD_FLAGS="-m ${ONLY_FOR_ELF64} -fuse-ld=lld ${HARDEN_LDFLAGS_PRODUCTION} -z retpolineplt"
+PROJECT_CXX_FLAGS="-fPIC -std=c++11 -Wno-unused-command-line-argument"
+PROJECT_LD_FLAGS="-m ${ONLY_FOR_ELF64} -fuse-ld=lld"
+# ${HARDEN_LDFLAGS_PRODUCTION}
 
 # Link project with all required system libraries:
 PROJECT_LINKS_WITH="-lc -lc++ -lgcc_s -lkvm -lprocstat"
