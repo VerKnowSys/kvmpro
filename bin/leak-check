@@ -31,8 +31,12 @@ c++ \
 echo
 note "Running bin: $(distn "${LEAK_CHECK_PRODUCT_BIN}")"
 
+if [ ! -x "/Software/Llvm/bin/llvm-symbolizer" ]; then
+    warn "No $(diste "llvm-symbolizer") is available in PATH! Functionality will be limited!"
+fi
+
 # ASAN_OPTIONS=help=1 \
-ASAN_OPTIONS=color=always:halt_on_error=0:verbosity=8:debug=0:replace_str=1:intercept_strlen=1:print_cmdline=1:print_stats=1:symbolize_inline_frames=1:print_summary=1:verify_asan_link_order=0:can_use_proc_maps_statm=0:decorate_proc_maps=0:detect_stack_use_after_return=1:strict_string_checks=0:check_initialization_order=0:report_globals=1:dedup_token_length=1:malloc_context_size=64:detect_container_overflow=0:alloc_dealloc_mismatch=1:print_full_thread_history=1:new_delete_type_mismatch=1:fast_unwind_on_check=1:fast_unwind_on_fatal=1:fast_unwind_on_malloc=0:handle_ioctl=0:allow_addr2line=0:symbolize=1:external_symbolizer_path=/Software/Llvm/bin/llvm-symbolizer \
+ASAN_OPTIONS=color=always:halt_on_error=0:verbosity=1:debug=1:replace_str=1:intercept_strlen=1:print_cmdline=1:print_stats=1:symbolize_inline_frames=1:print_summary=1:verify_asan_link_order=0:can_use_proc_maps_statm=0:decorate_proc_maps=0:detect_stack_use_after_return=1:strict_string_checks=0:check_initialization_order=0:report_globals=1:dedup_token_length=1:malloc_context_size=64:detect_container_overflow=0:alloc_dealloc_mismatch=1:print_full_thread_history=1:new_delete_type_mismatch=1:fast_unwind_on_check=1:fast_unwind_on_fatal=1:fast_unwind_on_malloc=0:handle_ioctl=0:allow_addr2line=0:symbolize=1:external_symbolizer_path=/Software/Llvm/bin/llvm-symbolizer \
     "${LEAK_CHECK_PRODUCT_BIN}" \
         || exit 1
 
