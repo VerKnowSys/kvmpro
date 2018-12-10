@@ -85,8 +85,8 @@ extern "C" {
 // convert given protocol to plain string:
 const string protocol_to_string(const int domain, const int type, const int protocol);
 
-    // convert given address to plain string:
-    EXPORT_SHARED_OBJECT char* addr_to_string(struct sockaddr_storage *ss);
+// convert given address to plain string:
+const string addr_to_string(const struct sockaddr_storage *ss);
 
     // read procstat data from kernel:
     EXPORT_SHARED_OBJECT char* procstat_files(struct procstat *procstat, struct kinfo_proc *kipp); // NOTE: Very FreeBSD specific:

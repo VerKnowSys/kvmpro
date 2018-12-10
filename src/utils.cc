@@ -36,25 +36,17 @@ const string protocol_to_string(const int domain, const int type, const int prot
 }
 
 
-const char* addr_to_string(struct sockaddr_storage *ss) {
-    char portstr[7];
-    char str[512];
-    char stripv6[INET6_ADDRSTRLEN];
+const string addr_to_string(const struct sockaddr_storage *ss) {
+    stringstream out;
+    char port_str[7];
+    char addr_strv4[INET_ADDRSTRLEN];
+    char addr_strv6[INET6_ADDRSTRLEN];
     struct sockaddr_in6 *sin6;
     struct sockaddr_in *sin;
     struct sockaddr_un *sun;
     struct sockaddr_dl *sdl;
-    stringstream out;
-    switch (ss->ss_family) {
-        // case 255: {
-        //     int addr_no = 0;
-        //     sin = (struct sockaddr_in *)ss;
-        //     while(sin->sin_addr.s_addr & (0x800000 >> addr_no)) addr_no++;
-        //     sprintf(str,"/%d", addr_no);
-        //     out << str;
-        //     break;
-        // }
 
+    switch (ss->ss_family) {
         case AF_LOCAL: {
             sun = (struct sockaddr_un *)ss;
             if (sun->sun_path[0] == 0)
@@ -66,49 +58,49 @@ const char* addr_to_string(struct sockaddr_storage *ss) {
 
         case AF_INET: {
             sin = (struct sockaddr_in *)ss;
-            if (ntohs(sin->sin_port) != 0) {
-                snprintf(portstr, sizeof(portstr), "%d", ntohs(sin->sin_port));
+            if (ntohs(sin->sin_port) != 0)
+                snprintf(port_str, sizeof(port_str), "%d", ntohs(sin->sin_port));
+            else
+                snprintf(port_str, sizeof(port_str), "%d", 0);
+
+            if (inet_ntop(AF_INET, &sin->sin_addr, addr_strv4, sizeof(addr_strv4)) != NULL) {
+                out << addr_strv4 << ":" << port_str;
             } else {
-                snprintf(portstr, sizeof(portstr), "%d", 0);
-            }
-            if (inet_ntop(AF_INET, &sin->sin_addr, str, sizeof(str)) != NULL) {
-                out << str << ":" << portstr;
-            } else {
-                out << "0.0.0.0" << ":" << portstr;
+                out << "0.0.0.0/0";
             }
             break;
         }
 
         case AF_LINK: {
             sdl = (struct sockaddr_dl *)ss;
-            if (sdl->sdl_nlen > 0) {
-                snprintf(str, sizeof(str), "%*s", sdl->sdl_nlen, &sdl->sdl_data[0]);
-            } else {
-                snprintf(str, sizeof(str), "link#%d", sdl->sdl_index);
-            }
-            out << str;
+            if (sdl->sdl_nlen > 0)
+                snprintf(addr_strv4, sizeof(addr_strv4), "%*s", sdl->sdl_nlen, &sdl->sdl_data[0]);
+            else
+                snprintf(addr_strv4, sizeof(addr_strv4), "link#%d", sdl->sdl_index);
+
+            out << addr_strv4;
             break;
         }
 
         case AF_INET6: {
             sin6 = (struct sockaddr_in6 *)ss;
-            if (ntohs(sin6->sin6_port) != 0) {
-                snprintf(portstr, sizeof(portstr), "%d", ntohs(sin6->sin6_port));
-            } else {
-                snprintf(portstr, sizeof(portstr), "%d", 0);
-            }
-            if (inet_ntop(AF_INET6, &sin6->sin6_addr, stripv6, sizeof(stripv6)) != NULL)
-                out << "[" << stripv6 << "]" << ":" << portstr;
+            if (ntohs(sin6->sin6_port) != 0)
+                snprintf(port_str, sizeof(port_str), "%d", ntohs(sin6->sin6_port));
             else
-                out << "[::1]" << ":" << portstr;
+                snprintf(port_str, sizeof(port_str), "%d", 0);
+
+            if (inet_ntop(AF_INET6, &sin6->sin6_addr, addr_strv6, sizeof(addr_strv6)) != NULL)
+                out << "[" << addr_strv6 << "]" << ":" << port_str;
+            else
+                out << "[::1]" << ":" << port_str;
             break;
         }
 
         case AF_UNSPEC:
         default:
-            out << "0.0.0.0" << ":" << "0";
+            out << "::/0";
     }
-    return (const char*)out.str().data();
+    return out.str();
 }
 
 
