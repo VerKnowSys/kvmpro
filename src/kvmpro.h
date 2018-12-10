@@ -83,13 +83,13 @@ extern "C" {
     //
 
     // convert given protocol to plain string:
-    EXPORT_SHARED_OBJECT const char* protocol_to_string(int domain, int type, int protocol);
+    EXPORT_SHARED_OBJECT char* protocol_to_string(int domain, int type, int protocol);
 
     // convert given address to plain string:
-    EXPORT_SHARED_OBJECT const char* addr_to_string(struct sockaddr_storage *ss);
+    EXPORT_SHARED_OBJECT char* addr_to_string(struct sockaddr_storage *ss);
 
     // read procstat data from kernel:
-    EXPORT_SHARED_OBJECT const char* procstat_files(struct procstat *procstat, struct kinfo_proc *kipp); // NOTE: Very FreeBSD specific:
+    EXPORT_SHARED_OBJECT char* procstat_files(struct procstat *procstat, struct kinfo_proc *kipp); // NOTE: Very FreeBSD specific:
 
 
     //
