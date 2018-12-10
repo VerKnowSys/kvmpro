@@ -37,12 +37,11 @@ const char* procstat_files(struct procstat *procstat, struct kinfo_proc *kipp) {
                 << addr_to_string(&sock.sa_peer);
         }
     }
-    string ret_value = out.str();
     if (head)
         procstat_freefiles(procstat, head);
     if (kipp)
         procstat_freeprocs(procstat, kipp);
     if (procstat)
         procstat_close(procstat);
-    return (const char*)ret_value.data();
+    return (const char*)out.str().data();
 }
