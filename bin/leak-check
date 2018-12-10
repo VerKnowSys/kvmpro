@@ -3,7 +3,12 @@
 # 2018-12-10-1954-1544468099
 
 
-touch .leak-check
+touch ".leak-check"
+trap 'rm -f .leak-check' INT
+trap 'rm -f .leak-check' QUIT
+trap 'rm -f .leak-check' TERM
+
+
 . bin/clean
 . bin/build
 
@@ -42,7 +47,7 @@ ASAN_OPTIONS=color=always:halt_on_error=0:verbosity=5:debug=1:replace_str=1:inte
         || exit 1
 
 # lldb -f "${LEAK_CHECK_PRODUCT_BIN}" \
-rm -f .leak-check
+rm -f ".leak-check"
 echo
 note "Leaks-Check finished."
 exit 0
