@@ -1,11 +1,11 @@
 #include "kvmpro.h"
 
 
-const char* get_process_usage(uid_t uid) {
-    string command, output;
+const char* get_process_usage(const uid_t uid) {
+    string output;
     int count = 0;
-    char** args = NULL;
     int pagesize = getpagesize();
+    char** args = NULL;
 
     kvm_t* kd = kvm_open(NULL, NULL, NULL, O_RDONLY, NULL);
     if (kd == NULL) {
@@ -20,8 +20,8 @@ const char* get_process_usage(uid_t uid) {
     }
 
     for (int i = 0; i < count; ++i) {
-        stringstream out;
-        command = "";
+        stringstream inner_outout;
+        string command = string("");
         args = kvm_getargv(kd, procs, 0);
         for (int y = 0; (args != 0) && (args[y] != 0); y++)
             if (y == 0)
@@ -36,16 +36,17 @@ const char* get_process_usage(uid_t uid) {
                 kvm_close(kd);
             return (const char*)"{\"status\": \"Failure opening procstat_open_sysctl()!\"}";
         }
+        string statinfo = string("");
         struct kinfo_proc* kproc = procstat_getprocs(procstat, KERN_PROC_PID, procs->ki_pid, &cnt);
-        string statinfo = "";
-        if (cnt != 0)
-            statinfo = procstat_files(procstat, kproc);
-
-        // Render JSON directly:
-        if (i == 0) {
-            out << "{\"status\": \"Full process list ready.\", \"list\": [";
+        if (kproc != NULL && cnt > 0) {
+            statinfo = escape_json(procstat_files(procstat, kproc));
+            procstat_freeprocs(procstat, kproc);
+            procstat_close(procstat);
         }
-        out << "{\"pid\":" << (procs->ki_pid) << ","
+        if (i == 0) { // Render JSON:
+            inner_outout << "{\"status\": \"Full process list ready.\", \"list\": [";
+        }
+        inner_outout << "{\"pid\":" << (procs->ki_pid) << ","
             << "\"ppid\":" << (procs->ki_ppid) << ","
             << "\"name\":\"" << escape_json(procs->ki_comm) << "\","
             << "\"cmd\":\"" << escape_json(command) << "\","
@@ -56,13 +57,13 @@ const char* get_process_usage(uid_t uid) {
             << "\"blk_out\":" << (procs->ki_rusage.ru_oublock) << ","
             << "\"nthr\":" << (procs->ki_numthreads) << ","
             << "\"pri_level\":" << ord(procs->ki_pri.pri_level) << ","
-            << "\"stat_info\":\"" << escape_json(statinfo) << "\"}";
+            << "\"stat_info\":\"" << statinfo << "\"}";
         if (i == count - 1) {
-            out << "]}";
+            inner_outout << "]}";
         } else {
-            out << ",";
+            inner_outout << ",";
         }
-        output += out.str();
+        output += inner_outout.str();
         procs++;
     }
     if (kd)
@@ -71,7 +72,7 @@ const char* get_process_usage(uid_t uid) {
 }
 
 
-const char* get_process_usage_short(uid_t uid) {
+const char* get_process_usage_short(const uid_t uid) {
     string output;
     int count = 0;
     char** args = NULL;
@@ -93,21 +94,21 @@ const char* get_process_usage_short(uid_t uid) {
 
     output += "{\"status\": \"Process list ready.\", \"list\": [";
     for (int i = 0; i < count; ++i) {
-        stringstream out;
+        stringstream inner_outout;
         args = kvm_getargv(kd, procs, 0);
-        out << "{\"cmd\":\"" << (procs->ki_comm) << "\","
+        inner_outout << "{\"cmd\":\"" << (procs->ki_comm) << "\","
             << "\"pid\":" << (procs->ki_pid) << ","
             << "\"ppid\":" << (procs->ki_ppid) << ","
             << "\"runtime\":" << (procs->ki_runtime / 1000) << ","
             << "\"blk_in\":" << (procs->ki_rusage.ru_inblock) << ","
             << "\"blk_out\":" << (procs->ki_rusage.ru_oublock) << ","
             << "\"rss\":" << (procs->ki_rssize * getpagesize()) << "}";
-        if (i + 1 != count) out << ","; // if last element not detected add a comma
-        output += out.str();
+        if (i + 1 != count) inner_outout << ","; // if last element not detected add a comma
+        output += inner_outout.str();
         procs++;
     }
+    output += "]}";
     if (kd)
         kvm_close(kd);
-    output += "]}";
     return (const char*)output.data();
 }

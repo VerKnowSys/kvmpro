@@ -73,14 +73,7 @@ using namespace std;
 
 
 // JSON escape helper for C++:
-EXPORT_SHARED_OBJECT const string escape_json(const string& input);
-
-
-extern "C" {
-
-    //
-    // Public Helpers:
-    //
+const string escape_json(const string& input);
 
 // convert given protocol to plain string:
 const string protocol_to_string(const int domain, const int type, const int protocol);
@@ -92,18 +85,19 @@ const string addr_to_string(const struct sockaddr_storage *ss);
 const string procstat_files(struct procstat *procstat, struct kinfo_proc *kipp); // NOTE: FreeBSD/HardenedBSD specific feature:
 
 
-    //
-    // Public Functions:
-    //
+//
+// Exported, Public Functions provided by this library:
+//
+extern "C" {
 
     // generates JSON of processes which belong to user with given "uid".
     // this list contains every process information available, including open sockets,
     // open network connections, protocols, bound addresses and ports.
-    EXPORT_SHARED_OBJECT const char* get_process_usage(uid_t uid);
+    EXPORT_SHARED_OBJECT const char* get_process_usage(const uid_t uid);
 
     // generates simplified JSON of processes which belong to user with given "uid".
     // (simplified data structure without "socketstat" field and additional, often rarely used fields).
-    EXPORT_SHARED_OBJECT const char* get_process_usage_short(uid_t uid);
+    EXPORT_SHARED_OBJECT const char* get_process_usage_short(const uid_t uid);
 
 }
 
