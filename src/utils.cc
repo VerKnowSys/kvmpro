@@ -7,31 +7,31 @@ const char* protocol_to_string(int domain, int type, int protocol) {
         case AF_INET6:
             switch (protocol) {
                 case IPPROTO_TCP:
-                    return ("TCP");
+                    return (const char*)"TCP";
                 case IPPROTO_UDP:
-                    return ("UDP");
+                    return (const char*)"UDP";
                 case IPPROTO_ICMP:
-                    return ("ICM");
+                    return (const char*)"ICM";
                 case IPPROTO_RAW:
-                    return ("RAW");
+                    return (const char*)"RAW";
                 case IPPROTO_SCTP:
-                    return ("SCT");
+                    return (const char*)"SCT";
                 case IPPROTO_DIVERT:
-                    return ("IPD");
+                    return (const char*)"IPD";
                 default:
-                    return ("IP?");
+                    return (const char*)"IP?";
             }
         case AF_LOCAL:
             switch (type) {
                 case SOCK_STREAM:
-                    return ("UDS");
+                    return (const char*)"UDS";
                 case SOCK_DGRAM:
-                    return ("UDD");
+                    return (const char*)"UDD";
                 default:
-                    return ("UD?");
+                    return (const char*)"UD?";
             }
         default:
-            return ("LOC");
+            return (const char*)"LOC";
     }
 }
 
@@ -108,7 +108,7 @@ const char* addr_to_string(struct sockaddr_storage *ss) {
         default:
             out << "0.0.0.0" << ":" << "0";
     }
-    return out.str().c_str();
+    return (const char*)out.str().data();
 }
 
 
