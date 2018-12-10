@@ -17,7 +17,7 @@ PROJECT_BUILD_DIR="obj"
 
 # Use Sofin variables with compiler setup:
 PROJECT_CXX_FLAGS="-fPIC -std=c++11 ${HARDEN_CFLAGS} ${HARDEN_CFLAGS_PRODUCTION} ${CMACROS} ${RETPOLINE_CFLAGS} ${HARDEN_CMACROS} ${HARDEN_OFLOW_CFLAGS} --param ssp-buffer-size=4 -Wno-unused-command-line-argument"
-PROJECT_LD_FLAGS="-m ${ONLY_FOR_ELF64} -z retpolineplt ${HARDEN_LDFLAGS_PRODUCTION}"
+PROJECT_LD_FLAGS="-m ${ONLY_FOR_ELF64} -fuse-ld=lld ${HARDEN_LDFLAGS_PRODUCTION} -z relro,now,retpolineplt"
 
 # Link project with all required system libraries:
 PROJECT_LINKS_WITH="-lc -lc++ -lgcc_s -lkvm -lprocstat"
@@ -57,16 +57,16 @@ for _pro_file in \
         _state="${_state} ${_pro_file}"
         note "Building objects:$(distn "${_state}")…"
         c++ \
+            -c \
             ${PROJECT_CXX_FLAGS} \
             -o "${PROJECT_BUILD_DIR}/${_pro_file}.o" \
-            -c \
             "src/${_pro_file}.cc"
 done
 echo
 
 # Link to shared library:
 note "Link shared-object with system libraries: $(distn "${PROJECT_LINKS_WITH}")."
-ld \
+ld -shared \
     ${PROJECT_LD_FLAGS} \
     ${PROJECT_LINKS_WITH} \
     -o "${PROJECT_PREFIX}/${PROJECT_LIBRARY_NAME}" \
