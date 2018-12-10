@@ -31,6 +31,11 @@ const char* get_process_usage(uid_t uid) {
 
         unsigned int cnt = 0;
         struct procstat* procstat = procstat_open_sysctl();
+        if (procstat == NULL) {
+            if (kd)
+                kvm_close(kd);
+            return (const char*)"{\"status\": \"Failure opening procstat_open_sysctl()!\", \"list\": []}";
+        }
         struct kinfo_proc* kproc = procstat_getprocs(procstat, KERN_PROC_PID, procs->ki_pid, &cnt);
         string statinfo = "";
         if (cnt != 0)
