@@ -93,7 +93,7 @@ const char* get_process_usage_short(uid_t uid) {
             << "\"runtime\":" << (procs->ki_runtime / 1000) << ","
             << "\"blk_in\":" << (procs->ki_rusage.ru_inblock) << ","
             << "\"blk_out\":" << (procs->ki_rusage.ru_oublock) << ","
-            << "\"rss\":" << (procs->ki_rssize * pagesize) << "}";
+            << "\"rss\":" << (procs->ki_rssize * getpagesize()) << "}";
         if (i + 1 != count) out << ","; // if last element not detected add a comma
         output += out.str();
         procs++;
