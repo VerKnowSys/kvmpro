@@ -9,7 +9,7 @@
 ONLY_FOR_ELF64="elf_x86_64_fbsd"
 
 # Link product to library name:
-PROJECT_LIBRARY_NAME="kvmpro"
+PROJECT_LIBRARY_NAME="libkvmpro.so"
 
 # Install products to-directory:
 PROJECT_PREFIX="lib"
