@@ -14,9 +14,8 @@ c++ \
     ${PROJECT_CXX_FLAGS} \
     ${PROJECT_LINKS_WITH} \
     -o "${PROJECT_BUILD_DIR}/${PROJECT_TEST_SUITE}" \
-    "src/utils.cc" \
-    "src/procstat.cc" \
-    "src/kvm.cc" \
+    "src/kvmpro_utils.cc" \
+    "src/kvmpro_pub.cc" \
     "src/tests.cc"
 
 if [ "leaks" = "${1}" ]; then
@@ -24,9 +23,8 @@ if [ "leaks" = "${1}" ]; then
         ${PROJECT_CXX_FLAGS} \
         ${PROJECT_LINKS_WITH} \
         -o "${PROJECT_BUILD_DIR}/${PROJECT_TEST_SUITE}_leak" \
-        "src/utils.cc" \
-        "src/procstat.cc" \
-        "src/kvm.cc" \
+        "src/kvmpro_utils.cc" \
+        "src/kvmpro_pub.cc" \
         "src/tests_leak.cc"
 fi
 

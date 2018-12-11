@@ -28,9 +28,8 @@ c++ \
     ${PROJECT_CXX_FLAGS} \
     ${PROJECT_LINKS_WITH} \
     -o "${LEAK_CHECK_PRODUCT_BIN}" \
-    "src/utils.cc" \
-    "src/procstat.cc" \
-    "src/kvm.cc" \
+    "src/kvmpro_utils.cc" \
+    "src/kvmpro_pub.cc" \
     "src/tests_leak.cc"
 
 
