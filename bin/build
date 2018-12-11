@@ -80,8 +80,8 @@ ranlib \
     "${PROJECT_PREFIX}/${PROJECT_LIBRARY_NAME%.so}.a"
 
 echo
-note "Strip all symbols…"
-strip -s "${PROJECT_PREFIX}/${PROJECT_LIBRARY_NAME}"
+# note "Strip all symbols…"
+# strip -s "${PROJECT_PREFIX}/${PROJECT_LIBRARY_NAME}"
 
 if [ -f "${PROJECT_PREFIX}/${PROJECT_LIBRARY_NAME}" ]; then
     permnote "Shared build successful: $(distn "${PROJECT_PREFIX}/${PROJECT_LIBRARY_NAME}")"
