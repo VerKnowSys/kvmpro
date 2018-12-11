@@ -1,7 +1,8 @@
 #include "kvmpro.h"
 
 
-const string protocol_to_string(const int domain, const int type, const int protocol) {
+const string
+protocol_to_string(const int domain, const int type, const int protocol) {
     switch (domain) {
         case AF_INET:
         case AF_INET6:
@@ -36,7 +37,8 @@ const string protocol_to_string(const int domain, const int type, const int prot
 }
 
 
-const string addr_to_string(const struct sockaddr_storage *ss) {
+const string
+addr_to_string(const struct sockaddr_storage *ss) {
     stringstream out;
     char port_str[7];
     char addr_strv4[INET_ADDRSTRLEN];
@@ -104,7 +106,8 @@ const string addr_to_string(const struct sockaddr_storage *ss) {
 }
 
 
-const string escape_json(const string& input) {
+const string
+escape_json(const string& input) {
     std::ostringstream ss;
     // C++11:
     // for (auto iter = input.cbegin(); iter != input.cend(); iter++) {

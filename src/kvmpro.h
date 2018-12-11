@@ -8,7 +8,7 @@
 #define __KVM_PRO__
 
 
-#define KVMPRO_VERSION "0.6.8"
+#define KVMPRO_VERSION "0.6.9"
 
 #include <iostream>
 #include <string>
@@ -61,7 +61,7 @@
 #elif __NetBSD__
     #error "NetBSD is not supported as production platform."
 #elif __APPLE__
-    #error "Darwin is not supported as production platform."
+    //printf "Darwin is not supported as production platform."
 #else
     #error "Unsupported unknown platform."
 #endif
@@ -93,11 +93,11 @@ const string procstat_files(struct procstat *procstat, struct kinfo_proc *kipp);
     // generates JSON of processes which belong to user with given "uid".
     // this list contains every process information available, including open sockets,
     // open network connections, protocols, bound addresses and ports.
-    extern EXPORT_SHARED_OBJECT string get_process_usage(uid_t uid);
+    extern EXPORT_SHARED_OBJECT const string get_process_usage(uid_t uid);
 
     // generates simplified JSON of processes which belong to user with given "uid".
     // (simplified data structure without "socketstat" field and additional, often rarely used fields).
-    extern EXPORT_SHARED_OBJECT string get_process_usage_short(uid_t uid);
+    extern EXPORT_SHARED_OBJECT const string get_process_usage_short(uid_t uid);
 
 
 #endif

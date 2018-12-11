@@ -1,7 +1,8 @@
 #include "kvmpro.h"
 
 
-string get_process_usage(uid_t uid) {
+const string
+get_process_usage(uid_t uid) {
     kvm_t* kd = kvm_open(NULL, NULL, NULL, O_RDONLY, NULL);
     if (kd == NULL) {
         return string("{\"status\": \"Failure on: kvm_open()!\"}");
@@ -65,7 +66,8 @@ string get_process_usage(uid_t uid) {
 }
 
 
-string get_process_usage_short(uid_t uid) {
+const string
+get_process_usage_short(uid_t uid) {
     kvm_t* kd = kvm_open(NULL, NULL, NULL, O_RDONLY, NULL);
     if (kd == NULL)
         return string("{\"status\": \"Failure on: kvm_open()\"}");
