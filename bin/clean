@@ -6,4 +6,4 @@ note "kvmpro: bin/clean: Removing: $(distn "obj/*.o") and $(distn "lib/*.{a, so}
 rm -f \
     lib/*.a \
     lib/*.so \
-    obj/*
+    obj/*.o
