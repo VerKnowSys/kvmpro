@@ -16,7 +16,7 @@ PROJECT_PREFIX="lib"
 PROJECT_BUILD_DIR="obj"
 
 # Use Sofin variables with compiler setup:
-PROJECT_CXX_FLAGS="-g -gdwarf-2 -fPIC -std=c++11 -Wno-unused-command-line-argument"
+PROJECT_CXX_FLAGS="-g -gdwarf-2 -fPIC -std=c++14 -Wno-unused-command-line-argument"
 PROJECT_LD_FLAGS="-m ${ONLY_FOR_ELF64} -fuse-ld=lld"
 # ${HARDEN_LDFLAGS_PRODUCTION}
 
