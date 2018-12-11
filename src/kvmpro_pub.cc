@@ -1,8 +1,8 @@
-#include "kvmpro.h"
+#include "kvmpro.hpp"
 
 
 const string
-get_process_usage(uid_t uid) {
+Kvmpro::get_process_usage(uid_t uid) {
     kvm_t* kd = kvm_open(NULL, NULL, NULL, O_RDONLY, NULL);
     if (kd == NULL) {
         return string("{\"status\": \"Failure on: kvm_open()!\"}");
@@ -37,14 +37,14 @@ get_process_usage(uid_t uid) {
         string statinfo = string();
         struct kinfo_proc* kproc = procstat_getprocs(procstat, KERN_PROC_PID, procs->ki_pid, &cnt);
         if (kproc != NULL && cnt > 0) {
-            statinfo = escape_json(procstat_files(procstat, kproc));
+            statinfo = Kvmpro::escape_json(procstat_files(procstat, kproc));
             procstat_freeprocs(procstat, kproc);
             procstat_close(procstat);
         }
         output << "{\"pid\":" << (procs->ki_pid) << ","
             << "\"ppid\":" << (procs->ki_ppid) << ","
-            << "\"name\":\"" << escape_json(procs->ki_comm) << "\","
-            << "\"cmd\":\"" << escape_json(command.str()) << "\","
+            << "\"name\":\"" << Kvmpro::escape_json(procs->ki_comm) << "\","
+            << "\"cmd\":\"" << Kvmpro::escape_json(command.str()) << "\","
             << "\"rss\":" << (procs->ki_rssize * getpagesize()) << ","
             << "\"mrss\":" << (procs->ki_rusage.ru_maxrss * getpagesize()) << ","
             << "\"runtime\":" << (procs->ki_runtime / 1000) << ","
@@ -67,7 +67,7 @@ get_process_usage(uid_t uid) {
 
 
 const string
-get_process_usage_short(uid_t uid) {
+Kvmpro::get_process_usage_short(uid_t uid) {
     kvm_t* kd = kvm_open(NULL, NULL, NULL, O_RDONLY, NULL);
     if (kd == NULL)
         return string("{\"status\": \"Failure on: kvm_open()\"}");
