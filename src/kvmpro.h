@@ -90,7 +90,9 @@ const string procstat_files(struct procstat *procstat, struct kinfo_proc *kipp);
 //
 
 
+#ifdef __cplusplus
 extern "C" {
+#endif
 
     // generates JSON of processes which belong to user with given "uid".
     // this list contains every process information available, including open sockets,
@@ -101,7 +103,9 @@ extern "C" {
     // (simplified data structure without "socketstat" field and additional, often rarely used fields).
     EXPORT_SHARED_OBJECT const string get_process_usage_short(const uid_t uid);
 
-}
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif
