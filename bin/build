@@ -9,14 +9,14 @@
 ONLY_FOR_ELF64="elf_x86_64_fbsd"
 
 # Link product to library name:
-PROJECT_LIBRARY_NAME="libkvmpro.so"
+PROJECT_LIBRARY_NAME="kvmpro"
 
 # Install products to-directory:
 PROJECT_PREFIX="lib"
 PROJECT_BUILD_DIR="obj"
 
 # Use Sofin variables with compiler setup:
-PROJECT_CXX_FLAGS="-fPIC -std=c++11 -Wno-unused-command-line-argument"
+PROJECT_CXX_FLAGS="-g -gdwarf-2 -fPIC -std=c++11 -Wno-unused-command-line-argument"
 PROJECT_LD_FLAGS="-m ${ONLY_FOR_ELF64} -fuse-ld=lld"
 # ${HARDEN_LDFLAGS_PRODUCTION}
 
@@ -35,7 +35,7 @@ if [ -f ".leak-check" ]; then
 
 else
     permnote "Build type: $(distn "Release")"
-    PROJECT_CXX_FLAGS="-g -O2 ${PROJECT_CXX_FLAGS}"
+    PROJECT_CXX_FLAGS="-O2 ${PROJECT_CXX_FLAGS}"
 fi
 
 
@@ -51,9 +51,8 @@ echo
 
 _state=""
 for _pro_file in \
-    "utils" \
-    "kvm" \
-    "procstat" \
+    "kvmpro_utils" \
+    "kvmpro_pub" \
     ; do
         _state="${_state} ${_pro_file}"
         note "Building objects:$(distn "${_state}")…"
