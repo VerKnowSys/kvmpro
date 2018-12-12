@@ -37,7 +37,7 @@ Kvmpro::get_process_usage(uid_t uid) {
         string statinfo = string();
         struct kinfo_proc* kproc = procstat_getprocs(procstat, KERN_PROC_PID, procs->ki_pid, &cnt);
         if (kproc != NULL && cnt > 0) {
-            statinfo = Kvmpro::escape_json(procstat_files(procstat, kproc));
+            statinfo = Kvmpro::escape_json(Kvmpro::procstat_files(procstat, kproc));
             procstat_freeprocs(procstat, kproc);
             procstat_close(procstat);
         }
