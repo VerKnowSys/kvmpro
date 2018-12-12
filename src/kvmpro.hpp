@@ -102,4 +102,19 @@ class Kvmpro {
 };
 
 
+
+/* For much easier operability with C symbol names: */
+extern "C" {
+
+
+    EXPORT_SHARED_OBJECT
+    const char* get_process_usage(uid_t uid);
+
+
+    EXPORT_SHARED_OBJECT
+    const char* get_process_usage_short(uid_t uid);
+
+}
+
+
 #endif

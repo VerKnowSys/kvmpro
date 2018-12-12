@@ -101,3 +101,23 @@ Kvmpro::get_process_usage_short(uid_t uid) {
         kvm_close(kd);
     return output.str();
 }
+
+
+/* For easier operability with C symbol names: */
+extern "C" {
+
+
+    EXPORT_SHARED_OBJECT
+    const char* get_process_usage(uid_t uid) {
+        return (const char*)Kvmpro::get_process_usage(uid).c_str();
+    }
+
+
+    EXPORT_SHARED_OBJECT
+    const char* get_process_usage_short(uid_t uid) {
+        return (const char*)Kvmpro::get_process_usage_short(uid).c_str();
+    }
+
+
+}
+
