@@ -109,13 +109,13 @@ extern "C" {
 
     EXPORT_SHARED_OBJECT
     const char* get_process_usage(uid_t uid) {
-        return (const char*)Kvmpro::get_process_usage(uid).c_str();
+        return Kvmpro::get_process_usage(uid).data();
     }
 
 
     EXPORT_SHARED_OBJECT
     const char* get_process_usage_short(uid_t uid) {
-        return (const char*)Kvmpro::get_process_usage_short(uid).c_str();
+        return Kvmpro::get_process_usage_short(uid).data();
     }
 
 
