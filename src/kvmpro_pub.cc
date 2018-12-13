@@ -109,13 +109,17 @@ extern "C" {
 
     EXPORT_SHARED_OBJECT
     const char* get_process_usage(uid_t uid) {
-        return Kvmpro::get_process_usage(uid).data();
+        auto kvmpro_out = Kvmpro::get_process_usage(uid);
+        auto my_str_ptr = unique_ptr<string>{new string(kvmpro_out)};
+        return my_str_ptr.get()->data();
     }
 
 
     EXPORT_SHARED_OBJECT
     const char* get_process_usage_short(uid_t uid) {
-        return Kvmpro::get_process_usage_short(uid).data();
+        auto kvmpro_out = Kvmpro::get_process_usage_short(uid);
+        auto my_str_ptr = unique_ptr<string>{new string(kvmpro_out)};
+        return my_str_ptr.get()->data();
     }
 
 
