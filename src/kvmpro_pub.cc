@@ -125,5 +125,25 @@ extern "C" {
     }
 
 
+    EXPORT_SHARED_OBJECT
+    kvmpro_t get_process_usage_t(uid_t uid) {
+        kvmpro_t data;
+        auto kvmpro_out = Kvmpro::get_process_usage(uid);
+        size_t copied_bytes = kvmpro_out.copy(data.bytes, kvmpro_out.length(), 0);
+        data.bytes[copied_bytes] = '\0'; // put \0 at end of copied list of bytes
+        return data;
+    }
+
+
+    EXPORT_SHARED_OBJECT
+    kvmpro_t get_process_usage_short_t(uid_t uid) {
+        kvmpro_t data;
+        auto kvmpro_out = Kvmpro::get_process_usage_short(uid);
+        size_t copied_bytes = kvmpro_out.copy(data.bytes, kvmpro_out.length(), 0);
+        data.bytes[copied_bytes] = '\0'; // put \0 at end of copied list of bytes
+        return data;
+    }
+
+
 }
 

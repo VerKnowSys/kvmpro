@@ -103,6 +103,15 @@ class Kvmpro {
 
 
 
+
+typedef struct {
+
+    char bytes[262144]; /* 256 KiB is max for JSON payload */
+
+} kvmpro_t;
+
+
+
 /* For much easier operability with C symbol names: */
 extern "C" {
 
@@ -113,6 +122,14 @@ extern "C" {
 
     EXPORT_SHARED_OBJECT
     const char* get_process_usage_short(uid_t uid);
+
+
+    EXPORT_SHARED_OBJECT
+    kvmpro_t get_process_usage_t(uid_t uid);
+
+
+    EXPORT_SHARED_OBJECT
+    kvmpro_t get_process_usage_short_t(uid_t uid);
 
 }
 
