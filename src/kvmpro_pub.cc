@@ -124,22 +124,48 @@ extern "C" {
 
 
     EXPORT_SHARED_OBJECT
-    kvmpro_t get_process_usage_t(uid_t uid) {
-        kvmpro_t data;
+    const kvmpro_t get_process_usage_t(uid_t uid) {
         auto kvmpro_out = Kvmpro::get_process_usage(uid);
-        size_t copied_bytes = kvmpro_out.copy(data.bytes, kvmpro_out.length(), 0);
-        data.bytes[copied_bytes] = '\0'; // put \0 at end of copied list of bytes
+        kvmpro_t data;
+        data.length = kvmpro_out.copy(data.bytes, kvmpro_out.length(), 0);
         return data;
     }
 
 
     EXPORT_SHARED_OBJECT
-    kvmpro_t get_process_usage_short_t(uid_t uid) {
-        kvmpro_t data;
+    const kvmpro_t get_process_usage_short_t(uid_t uid) {
         auto kvmpro_out = Kvmpro::get_process_usage_short(uid);
-        size_t copied_bytes = kvmpro_out.copy(data.bytes, kvmpro_out.length(), 0);
-        data.bytes[copied_bytes] = '\0'; // put \0 at end of copied list of bytes
+        kvmpro_t data;
+        auto length = kvmpro_out.length();
+        data.length = kvmpro_out.copy(data.bytes, length, 0);
         return data;
+    }
+
+
+    EXPORT_SHARED_OBJECT
+    kvmpro_t* get_process_usage_tp(uid_t uid) {
+        auto kvmpro_out = Kvmpro::get_process_usage(uid);
+        kvmpro_t* data = (kvmpro_t*)malloc(sizeof(kvmpro_t));
+        data->length = kvmpro_out.copy(data->bytes, kvmpro_out.length(), 0);
+        return data;
+    }
+
+
+    EXPORT_SHARED_OBJECT
+    kvmpro_t* get_process_usage_short_tp(uid_t uid) {
+        auto kvmpro_out = Kvmpro::get_process_usage_short(uid);
+        kvmpro_t* data = (kvmpro_t*)malloc(sizeof(kvmpro_t));
+        data->length = kvmpro_out.copy(data->bytes, kvmpro_out.length(), 0);
+        return data;
+    }
+
+
+    EXPORT_SHARED_OBJECT
+    void destroy_kvmpro_tp(kvmpro_t* obj) {
+        if (obj)
+            free(obj);
+
+        obj = nullptr;
     }
 
 

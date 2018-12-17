@@ -126,11 +126,23 @@ extern "C" {
 
 
     EXPORT_SHARED_OBJECT
-    kvmpro_t get_process_usage_t(uid_t uid);
+    const kvmpro_t get_process_usage_t(uid_t uid);
 
 
     EXPORT_SHARED_OBJECT
-    kvmpro_t get_process_usage_short_t(uid_t uid);
+    const kvmpro_t get_process_usage_short_t(uid_t uid);
+
+
+    EXPORT_SHARED_OBJECT
+    kvmpro_t* get_process_usage_tp(uid_t uid);
+
+
+    EXPORT_SHARED_OBJECT
+    kvmpro_t* get_process_usage_short_tp(uid_t uid);
+
+
+    EXPORT_SHARED_OBJECT
+    void destroy_kvmpro_tp(kvmpro_t* obj);
 
 }
 
