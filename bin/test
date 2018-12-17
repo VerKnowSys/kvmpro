@@ -16,7 +16,8 @@ c++ \
     -o "${PROJECT_BUILD_DIR}/${PROJECT_TEST_SUITE}" \
     "src/kvmpro_utils.cc" \
     "src/kvmpro_pub.cc" \
-    "src/tests.cc"
+    "src/tests.cc" \
+        || exit 1
 
 if [ "leaks" = "${1}" ]; then
     c++ \
@@ -25,13 +26,15 @@ if [ "leaks" = "${1}" ]; then
         -o "${PROJECT_BUILD_DIR}/${PROJECT_TEST_SUITE}_leak" \
         "src/kvmpro_utils.cc" \
         "src/kvmpro_pub.cc" \
-        "src/tests_leak.cc"
+        "src/tests_leak.cc" \
+            || exit 1
 fi
 
 echo
 note "Run tests…"
 # lldb -w -f
-"${PROJECT_BUILD_DIR}/${PROJECT_TEST_SUITE}"
+"${PROJECT_BUILD_DIR}/${PROJECT_TEST_SUITE}" \
+    || exit 1
 echo
 
 if [ "leaks" = "${1}" ]; then
