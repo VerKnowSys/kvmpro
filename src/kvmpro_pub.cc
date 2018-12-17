@@ -62,7 +62,6 @@ Kvmpro::get_process_usage(uid_t uid) {
     }
     if (kd)
         kvm_close(kd);
-    output << "\n" << "\0";
     return output.str();
 }
 
@@ -100,7 +99,6 @@ Kvmpro::get_process_usage_short(uid_t uid) {
     output << "]}";
     if (kd)
         kvm_close(kd);
-    output << "\n" << "\0";
     return output.str();
 }
 
