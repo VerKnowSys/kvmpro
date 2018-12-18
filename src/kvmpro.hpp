@@ -8,7 +8,7 @@
 #define __KVM_PRO__
 
 
-#define KVMPRO_VERSION "0.6.14"
+#define KVMPRO_VERSION "0.6.15"
 
 #include <iostream>
 #include <string>
