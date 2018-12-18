@@ -21,7 +21,7 @@ PROJECT_LD_FLAGS="-m ${ONLY_FOR_ELF64} -fuse-ld=lld"
 # ${HARDEN_LDFLAGS_PRODUCTION}
 
 # Link project with all required system libraries:
-PROJECT_LINKS_WITH="-lc -lc++ -lgcc_s -lkvm -lprocstat -ldl"
+PROJECT_LINKS_WITH="-lc -lc++ -lgcc_s -lkvm -lprocstat"
 
 # unset for production (default):
 unset ASAN_OPTIONS
