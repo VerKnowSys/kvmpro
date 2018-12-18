@@ -5,7 +5,7 @@
 
 . bin/build
 
-install -v lib/libkvmpro.a /usr/lib/ && \
+# install -v lib/libkvmpro.a /usr/lib/ && \
 install -v lib/libkvmpro.so /usr/lib/ && \
     echo && note "Library installed successfully." && \
         exit 0

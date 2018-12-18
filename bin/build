@@ -72,12 +72,12 @@ ld -shared \
     -o "${PROJECT_PREFIX}/${PROJECT_LIBRARY_NAME}" \
     ${PROJECT_BUILD_DIR}/*.o
 
-note "Link static-object with system libraries: $(distn "${PROJECT_LINKS_WITH}")."
-ar \
-    -cvq "${PROJECT_PREFIX}/${PROJECT_LIBRARY_NAME%.so}.a" \
-    ${PROJECT_BUILD_DIR}/*.o
-ranlib \
-    "${PROJECT_PREFIX}/${PROJECT_LIBRARY_NAME%.so}.a"
+# note "Link static-object with system libraries: $(distn "${PROJECT_LINKS_WITH}")."
+# ar \
+#     -cvq "${PROJECT_PREFIX}/${PROJECT_LIBRARY_NAME%.so}.a" \
+#     ${PROJECT_BUILD_DIR}/*.o
+# ranlib \
+#     "${PROJECT_PREFIX}/${PROJECT_LIBRARY_NAME%.so}.a"
 
 echo
 # note "Strip all symbols…"
@@ -85,11 +85,11 @@ echo
 
 if [ -f "${PROJECT_PREFIX}/${PROJECT_LIBRARY_NAME}" ]; then
     permnote "Shared build successful: $(distn "${PROJECT_PREFIX}/${PROJECT_LIBRARY_NAME}")"
-    if [ -f "${PROJECT_PREFIX}/${PROJECT_LIBRARY_NAME%.so}.a" ]; then
-        permnote "Static build successful: $(distn "${PROJECT_PREFIX}/${PROJECT_LIBRARY_NAME%.so}.a")"
-    else
-        error "Failed to build static library!"
-    fi
+    # if [ -f "${PROJECT_PREFIX}/${PROJECT_LIBRARY_NAME%.so}.a" ]; then
+    #     permnote "Static build successful: $(distn "${PROJECT_PREFIX}/${PROJECT_LIBRARY_NAME%.so}.a")"
+    # else
+    #     error "Failed to build static library!"
+    # fi
 else
     error "Failed to build shared library!"
 fi
