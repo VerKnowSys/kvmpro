@@ -40,8 +40,6 @@ int main(int argc, char const *argv[]) {
         assert(b != nullptr);
         destroy_kvmpro_tp(a);
         destroy_kvmpro_tp(b);
-        // assert(a == nullptr); // WHY THESE ARE NOT NULL?!
-        // assert(b == nullptr); // WHY THESE ARE NOT NULL?!
         get_process_usage_t(uid);
         get_process_usage_short_t(uid);
     }
