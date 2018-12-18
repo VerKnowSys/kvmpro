@@ -107,7 +107,7 @@ class Kvmpro {
 typedef struct {
 
     size_t length;
-    char bytes[262144]; /* 256 KiB is max for JSON payload */
+    uint8_t bytes[262144]; /* 256 KiB is max for JSON payload */
 
 } kvmpro_t;
 

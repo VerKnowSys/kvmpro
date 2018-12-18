@@ -127,7 +127,7 @@ extern "C" {
     const kvmpro_t get_process_usage_t(uid_t uid) {
         auto kvmpro_out = Kvmpro::get_process_usage(uid);
         kvmpro_t data;
-        data.length = kvmpro_out.copy(data.bytes, kvmpro_out.length(), 0);
+        data.length = kvmpro_out.copy((char*)data.bytes, kvmpro_out.length(), 0);
         return data;
     }
 
@@ -136,8 +136,7 @@ extern "C" {
     const kvmpro_t get_process_usage_short_t(uid_t uid) {
         auto kvmpro_out = Kvmpro::get_process_usage_short(uid);
         kvmpro_t data;
-        auto length = kvmpro_out.length();
-        data.length = kvmpro_out.copy(data.bytes, length, 0);
+        data.length = kvmpro_out.copy((char*)data.bytes, kvmpro_out.length(), 0);
         return data;
     }
 
@@ -146,7 +145,7 @@ extern "C" {
     kvmpro_t* get_process_usage_tp(uid_t uid) {
         auto kvmpro_out = Kvmpro::get_process_usage(uid);
         kvmpro_t* data = (kvmpro_t*)malloc(sizeof(kvmpro_t));
-        data->length = kvmpro_out.copy(data->bytes, kvmpro_out.length(), 0);
+        data->length = kvmpro_out.copy((char*)data->bytes, kvmpro_out.length(), 0);
         return data;
     }
 
@@ -155,7 +154,7 @@ extern "C" {
     kvmpro_t* get_process_usage_short_tp(uid_t uid) {
         auto kvmpro_out = Kvmpro::get_process_usage_short(uid);
         kvmpro_t* data = (kvmpro_t*)malloc(sizeof(kvmpro_t));
-        data->length = kvmpro_out.copy(data->bytes, kvmpro_out.length(), 0);
+        data->length = kvmpro_out.copy((char*)data->bytes, kvmpro_out.length(), 0);
         return data;
     }
 
