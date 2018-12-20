@@ -1,0 +1,31 @@
+#!/bin/sh
+# blame: @dmilith
+
+. bin/build
+
+echo
+permnote "Build tests-DL…"
+
+PROJECT_TEST_SUITE="tests-dl"
+
+
+permnote "Building tests-dl…"
+c++ \
+    ${PROJECT_CXX_FLAGS} \
+    ${PROJECT_LINKS_WITH} \
+    -rdynamic \
+    -o "${PROJECT_BUILD_DIR}/${PROJECT_TEST_SUITE}" \
+    -ldl \
+    "src/tests_dl.cc" \
+        || exit 1
+
+echo
+note "Run tests-dl…"
+# lldb -w -f
+"${PROJECT_BUILD_DIR}/${PROJECT_TEST_SUITE}" \
+    || exit 1
+echo
+
+
+note "Tests completed."
+exit 0
