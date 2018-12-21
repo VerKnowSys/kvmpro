@@ -73,8 +73,8 @@ note "kvmpro: Link shared-object with system libraries: $(distn "${PROJECT_LINKS
     ${PROJECT_BUILD_DIR}/*.o
 
 echo
-# note "Strip all symbols…"
-# strip -s "${PROJECT_PREFIX}/${PROJECT_LIBRARY_NAME}"
+note "kvmpro: Strip all symbols…"
+strip -s "${PROJECT_PREFIX}/${PROJECT_LIBRARY_NAME}"
 
 if [ -f "${PROJECT_PREFIX}/${PROJECT_LIBRARY_NAME}" ]; then
     permnote "Shared build successful: $(distn "${PROJECT_PREFIX}/${PROJECT_LIBRARY_NAME}")"
