@@ -17,9 +17,9 @@ PROJECT_PREFIX="lib"
 PROJECT_BUILD_DIR="obj"
 
 # Use Sofin variables with compiler setup:
-PROJECT_CXX_FLAGS="-std=c++14 -g -gdwarf-2 -fPIC -dynamiclib -flat_namespace -Wno-unused-command-line-argument"
-PROJECT_LD_FLAGS="-m ${ONLY_FOR_ELF64} -fuse-ld=lld"
 PROJECT_COMPILER="c++"
+PROJECT_CXX_FLAGS="-std=c++14 -flto -fuse-ld=lld -g -gdwarf-2 -fPIC -dynamiclib -flat_namespace -Wno-unused-command-line-argument"
+PROJECT_LD_FLAGS="-shared -flto -fuse-ld=lld"
 
 # Link project with all required system libraries:
 PROJECT_LINKS_WITH="-lc -lc++ -lgcc_s -lkvm -lprocstat"
