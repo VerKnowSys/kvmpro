@@ -45,7 +45,7 @@ mkdir -p \
     "${PROJECT_PREFIX}" \
     "${PROJECT_BUILD_DIR}"
 
-permnote "Library: $(distn "${PROJECT_LIBRARY_NAME%.so}")"
+permnote "Product library: $(distn "${PROJECT_LIBRARY_NAME%.so}")"
 permnote "Compiler flags: $(distn "${PROJECT_CXX_FLAGS}")"
 permnote "Linker flags: $(distn "${PROJECT_LD_FLAGS}")"
 echo
@@ -77,8 +77,8 @@ note "kvmpro: Strip all symbols…"
 strip -s "${PROJECT_PREFIX}/${PROJECT_LIBRARY_NAME}"
 
 if [ -f "${PROJECT_PREFIX}/${PROJECT_LIBRARY_NAME}" ]; then
-    permnote "Shared build successful: $(distn "${PROJECT_PREFIX}/${PROJECT_LIBRARY_NAME}")"
+    permnote "kvmpro: Shared build successful: $(distn "${PROJECT_PREFIX}/${PROJECT_LIBRARY_NAME}")"
 else
-    error "Failed to build shared library!"
+    error "kvmpro: Failed to build shared library!"
 fi
 
