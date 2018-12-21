@@ -6,7 +6,8 @@
 
 
 # Only for FreeBSD-compatible operating systems! Will just crash on other systems (if their "compiler tripple" has different value)
-ONLY_FOR_ELF64="elf_x86_64_fbsd"
+# ONLY_FOR_ELF64="elf_x86_64_fbsd"
+# ld flag: -m ${ONLY_FOR_ELF64}
 
 # Link product to library name:
 PROJECT_LIBRARY_NAME="libkvmpro.so"
@@ -18,7 +19,6 @@ PROJECT_BUILD_DIR="obj"
 # Use Sofin variables with compiler setup:
 PROJECT_CXX_FLAGS="-std=c++14 -g -gdwarf-2 -fPIC -dynamiclib -flat_namespace -Wno-unused-command-line-argument"
 PROJECT_LD_FLAGS="-m ${ONLY_FOR_ELF64} -fuse-ld=lld"
-# ${HARDEN_LDFLAGS_PRODUCTION}
 PROJECT_COMPILER="c++"
 
 # Link project with all required system libraries:
@@ -72,24 +72,12 @@ note "kvmpro: Link shared-object with system libraries: $(distn "${PROJECT_LINKS
     -o "${PROJECT_PREFIX}/${PROJECT_LIBRARY_NAME}" \
     ${PROJECT_BUILD_DIR}/*.o
 
-# note "Link static-object with system libraries: $(distn "${PROJECT_LINKS_WITH}")."
-# ar \
-#     -cvq "${PROJECT_PREFIX}/${PROJECT_LIBRARY_NAME%.so}.a" \
-#     ${PROJECT_BUILD_DIR}/*.o
-# ranlib \
-#     "${PROJECT_PREFIX}/${PROJECT_LIBRARY_NAME%.so}.a"
-
 echo
 # note "Strip all symbols…"
 # strip -s "${PROJECT_PREFIX}/${PROJECT_LIBRARY_NAME}"
 
 if [ -f "${PROJECT_PREFIX}/${PROJECT_LIBRARY_NAME}" ]; then
     permnote "Shared build successful: $(distn "${PROJECT_PREFIX}/${PROJECT_LIBRARY_NAME}")"
-    # if [ -f "${PROJECT_PREFIX}/${PROJECT_LIBRARY_NAME%.so}.a" ]; then
-    #     permnote "Static build successful: $(distn "${PROJECT_PREFIX}/${PROJECT_LIBRARY_NAME%.so}.a")"
-    # else
-    #     error "Failed to build static library!"
-    # fi
 else
     error "Failed to build shared library!"
 fi
