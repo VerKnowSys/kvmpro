@@ -19,6 +19,7 @@ PROJECT_BUILD_DIR="obj"
 PROJECT_CXX_FLAGS="-std=c++14 -g -gdwarf-2 -fPIC -dynamiclib -flat_namespace -Wno-unused-command-line-argument"
 PROJECT_LD_FLAGS="-m ${ONLY_FOR_ELF64} -fuse-ld=lld"
 # ${HARDEN_LDFLAGS_PRODUCTION}
+PROJECT_COMPILER="c++"
 
 # Link project with all required system libraries:
 PROJECT_LINKS_WITH="-lc -lc++ -lgcc_s -lkvm -lprocstat"
@@ -55,8 +56,8 @@ for _pro_file in \
     "kvmpro_pub" \
     ; do
         _state="${_state} ${_pro_file}"
-        note "Building objects:$(distn "${_state}")…"
-        c++ \
+        note "kvmpro: Building objects:$(distn "${_state}")…"
+        "${PROJECT_COMPILER}" \
             -c \
             ${PROJECT_CXX_FLAGS} \
             -o "${PROJECT_BUILD_DIR}/${_pro_file}.o" \
@@ -64,9 +65,8 @@ for _pro_file in \
 done
 echo
 
-# Link to shared library:
-note "Link shared-object with system libraries: $(distn "${PROJECT_LINKS_WITH}")."
-ld -shared \
+note "kvmpro: Link shared-object with system libraries: $(distn "${PROJECT_LINKS_WITH}")."
+"${PROJECT_COMPILER}" \
     ${PROJECT_LD_FLAGS} \
     ${PROJECT_LINKS_WITH} \
     -o "${PROJECT_PREFIX}/${PROJECT_LIBRARY_NAME}" \
